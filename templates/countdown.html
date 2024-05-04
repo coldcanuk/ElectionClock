@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canadian Election Countdown</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="countdown-container">
+        <!-- Twitter button positioned like a bullet -->
+        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            <h1 id="time" style="margin-left: 10px;"></h1>
+        </div>
+        <div id="fuse-container" style="width: 100%; height: 20px; background: black; position: relative;">
+            <div id="fuse" style="height: 100%; background: red; width: 100%;"></div>
+        </div>
+    </div>
+
+    <script>
+        function startCountdown(duration, display, fuse) {
+            var start = Date.now(), diff, days, hours, minutes, seconds, milliseconds, totalSeconds = duration;
+
+            function timer1() { // Main countdown function, updates every millisecond
+                var now = Date.now();
+                diff = duration - ((now - start) / 1000 | 0);
+                milliseconds = parseInt((now - start) % 1000, 10);
+
+                days = parseInt(diff / (24*60*60), 10);
+                hours = parseInt((diff % (24*60*60)) / (60*60), 10);
+                minutes = parseInt((diff % (60*60)) / 60, 10);
+                seconds = parseInt(diff % 60, 10);
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                milliseconds = milliseconds < 100 ? (milliseconds < 10 ? "00" + milliseconds : "0" + milliseconds) : milliseconds;
+
+                display.innerHTML = `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds and ${milliseconds} milliseconds`;
+
+                if (diff <= 0) {
+                    clearInterval(interval1);
+                    display.innerHTML = "The countdown is over!";
+                }
+            }
+
+            function time1k() { // Fuse update function, updates every second
+                var percentage = (diff / totalSeconds) * 100;
+                fuse.style.width = percentage + '%';
+
+                if (diff <= 0) {
+                    fuse.style.width = '0%'; // Ensure fuse is completely "burnt"
+                }
+            }
+
+            var interval1 = setInterval(timer1, 1); // Update every millisecond
+            var interval1k = setInterval(time1k, 1000); // Update every second
+        }
+
+        window.onload = function () {
+            var countdownTime = {{ time_left.total_seconds()|safe }};
+            var display = document.querySelector('#time');
+            var fuse = document.querySelector('#fuse');
+            startCountdown(countdownTime, display, fuse);
+        };
+    </script>
+</body>
+</html>
