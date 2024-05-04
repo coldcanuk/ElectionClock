@@ -1,7 +1,7 @@
 # Election Clock Website
 
 ## Overview
-The Election Clock website is a Flask-based web application that counts down to the next Canadian federal election. This project includes a dynamic visual display of a countdown timer and features integration with Twitter for social sharing capabilities.
+The Election Clock website is a dynamic Flask-based web application that provides a real-time countdown to the next Canadian federal election. This visually engaging app not only tracks the time down to the second but also includes functionality for users to share the countdown via Twitter directly from the interface.
 
 ## Features
 - Countdown to the Canadian federal election.
@@ -17,10 +17,12 @@ The Election Clock website is a Flask-based web application that counts down to 
 ## Setup
 1. Clone the repository:
    git clone https://github.com/yourusername/election-clock.git
-2. Install dependencies:
+2. Install dependencies to ensure the application runs smoothly:
    pip install -r requirements.txt
-3. Test the application locally:
+3. Test the application locally to test:
    flask run
+   - This command starts a local server. Open your browser and go to `http://localhost:5000` to view the app.
+   - Detailed steps to configure and deploy on a Linode server are included to facilitate a smooth transition from development to production.
 4. Set Up Your Linode Server
    Deploy an Ubuntu Server:
    Log into Linode and create a new Linode.

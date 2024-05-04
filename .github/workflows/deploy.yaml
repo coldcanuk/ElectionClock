@@ -1,0 +1,36 @@
+name: Deploy Flask App to Linode
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to the main branch
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set Up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+
+    - name: SSH and Deploy to Linode
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.IPV6 }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSHKEY }}
+        script: |
+          cd /path/to/your/application
+          git pull origin main
+          systemctl restart gunicorn  # Assuming you use systemd to manage your application
+
+    - name: Clean Up Post-Deployment
+      run: echo "Deployment Complete and Services Restarted"
+
