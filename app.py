@@ -1,6 +1,11 @@
 from flask import Flask, render_template
 from datetime import datetime
 import pytz
+import dotenv
+import os
+strSSHKEY = str(os.getenv('env_sshkey'))
+strIP = str(os.getenv('env_ipv4'))
+
 
 app = Flask(__name__)
 
