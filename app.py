@@ -29,7 +29,7 @@ logging.basicConfig(
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 # Log a message to indicate the application startup
-logging.info("***BEGIN app.py****")
+logging.info("****BEGIN app.py*****")
 
 elections = {
     'federal': '2025-10-19',
