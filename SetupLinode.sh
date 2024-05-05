@@ -29,7 +29,8 @@ sudo nginx -t
 sudo systemctl restart nginx
 
 # Setup Gunicorn to serve the Flask app
-gunicorn --workers 3 --bind unix:electionclock.sock -m 007 wsgi:app
+gunicorn --workers 3 --bind unix:electionclock.sock -m 007 wsgi:app &
+
 
 # Generate and add SSH keys for GitHub Actions
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
