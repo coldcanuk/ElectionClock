@@ -1,5 +1,6 @@
 # Election Clock Website
 
+
 ## Overview
 The Election Clock website is a dynamic Flask-based web application that provides a real-time countdown to the next Canadian federal election. This visually engaging app not only tracks the time down to the second but also includes functionality for users to share the countdown via Twitter directly from the interface.
 
