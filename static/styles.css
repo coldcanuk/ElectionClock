@@ -8,7 +8,7 @@ body, html {
 }
 .countdown-container {
     position: absolute;
-    top: 50%;
+    top: 90%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
@@ -31,4 +31,10 @@ body, html {
     background-color: red; /* Color of the burning fuse */
     width: 100%; /* Initial full length of the fuse */
     transition: width 1s linear;
+}
+
+.twitter-feed-container {
+    max-width: 600px; /* Adjusts the width of the Twitter feed */
+    margin: 10px auto; /* Centers the feed on the page with some margin */
+    top: 50%
 }
