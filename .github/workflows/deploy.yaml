@@ -30,12 +30,6 @@ jobs:
           cd /home/deployuser/web/ElectionClock/
           git pull origin main
     - name: Restart gunicorn
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.IPV4 }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.SSHKEY }}
-        script: |
-          systemctl restart gunicorn --no-ask-password
+      run: systemctl restart gunicorn --no-ask-password
     - name: Clean Up Post-Deployment
       run: echo "Deployment Complete and Services Restarted"
