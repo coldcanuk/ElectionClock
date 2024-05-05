@@ -50,5 +50,4 @@ sudo chown deployuser:deployuser /home/deployuser/web
 
 # Clone the repository into the specified directory
 sudo -u deployuser -H sh -c 'cd /home/deployuser/web; git clone https://github.com/YOURUSERNAMEHERE/election-clock.git electionclock'
-
 echo "Setup is complete. Replace 'password' with a secure password!"
