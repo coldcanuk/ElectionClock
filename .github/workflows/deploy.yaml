@@ -35,6 +35,7 @@ jobs:
         host: ${{ secrets.IPV4 }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSHKEY }}
-        run: systemctl restart gunicorn --no-ask-password
+        script: |
+          systemctl restart gunicorn --no-ask-password
     - name: Clean Up Post-Deployment
       run: echo "Deployment Complete and Services Restarted"
