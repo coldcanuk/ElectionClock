@@ -48,7 +48,7 @@
                 seconds = seconds < 10 ? "0" + seconds : seconds;
                 milliseconds = milliseconds < 100 ? (milliseconds < 10 ? "00" + milliseconds : "0" + milliseconds) : milliseconds;
 
-                display.innerHTML = `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds and ${milliseconds} milliseconds`;
+                display.innerHTML = `${days} days, ${hours} hours, ${minutes} minutes, ${seconds}:${milliseconds}`;
 
                 if (diff <= 0) {
                     clearInterval(interval1);
