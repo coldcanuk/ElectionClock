@@ -30,6 +30,6 @@ jobs:
           cd /home/deployuser/web/ElectionClock/
           git pull origin main
     - name: Restart gunicorn
-      run: systemctl restart gunicorn --no-ask-password --force
+      run: systemctl restart gunicorn
     - name: Clean Up Post-Deployment
       run: echo "Deployment Complete and Services Restarted"
