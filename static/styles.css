@@ -7,8 +7,8 @@ body, html {
     background-size: cover;
 }
 .countdown-container {
-    position: absolute;
-    top: 30%;
+    position: fixed;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
