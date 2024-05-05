@@ -34,11 +34,12 @@ body, html {
 }
 
 .twitter-feed-container {
-    position: bottom;
+    position:relative;
+    box-shadow: inset;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
     border-radius: 10px;
     padding: 50px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    max-width: 200px; /* Adjusts the width of the Twitter feed */
+    max-width: 100px; /* Adjusts the width of the Twitter feed */
     margin: 20px auto; /* Centers the feed on the page with some margin */
 }
