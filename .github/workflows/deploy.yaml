@@ -27,9 +27,9 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSHKEY }}
         script: |
-          cd /path/to/your/application
+          cd /home/deployuser/web/electionclock
           git pull origin main
-          systemctl restart gunicorn  # Assuming you use systemd to manage your application
+          sudo systemctl restart gunicorn
 
     - name: Clean Up Post-Deployment
       run: echo "Deployment Complete and Services Restarted"
