@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Canadian Election Countdown</title>
     <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .twitter-feed-container {
+            max-width: 600px; /* Adjusts the width of the Twitter feed */
+            margin: 20px auto; /* Centers the feed on the page with some margin */
+        }
+    </style>
 </head>
 <body>
     <div class="countdown-container">
@@ -20,7 +26,7 @@
     </div>
 
     <!-- Twitter timeline feed container -->
-    <div class="twitter-feed-container" style="margin-top: 2px;">
+    <div class="twitter-feed-container">
         <a class="twitter-timeline" href="https://twitter.com/CanadianPolling?ref_src=twsrc%5Etfw">Tweets by CanadianPolling</a>
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
