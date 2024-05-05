@@ -8,7 +8,7 @@ body, html {
 }
 .countdown-container {
     position: absolute;
-    top: 90%;
+    top: 10%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
@@ -34,7 +34,7 @@ body, html {
 }
 
 .twitter-feed-container {
-    max-width: 600px; /* Adjusts the width of the Twitter feed */
-    margin: 10px auto; /* Centers the feed on the page with some margin */
-    top: 50%
+    max-width: 300px; /* Adjusts the width of the Twitter feed */
+    margin: 20px auto; /* Centers the feed on the page with some margin */
+    top: 60%
 }
