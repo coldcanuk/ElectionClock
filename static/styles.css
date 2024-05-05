@@ -35,6 +35,7 @@ body, html {
 
 .twitter-feed-container {
     position:relative;
+    top: 60%;
     box-shadow: inset;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
     border-radius: 10px;
