@@ -37,7 +37,7 @@ body, html {
     position:relative;
     width: 50%;
     right: 15%;
-    top: 50%;
+    top: 40%;
     box-shadow:slategray;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
     border-radius: 10px;
