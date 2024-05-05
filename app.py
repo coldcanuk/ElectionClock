@@ -4,7 +4,6 @@ import pytz
 import sys
 import os
 import logging
-from dotenv import load_dotenv
 from loguru import logger  # Loguru is a library for easier logging in Python
 
 app = Flask(__name__)
