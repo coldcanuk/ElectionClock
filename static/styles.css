@@ -3,7 +3,7 @@ body, html {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
-    background: url('/static/images/default_bg.png') no-repeat center center fixed; 
+    background: url('/static/images/default_bg.webp') no-repeat center center fixed; 
     background-size: cover;
 }
 .countdown-container {
