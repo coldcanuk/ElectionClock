@@ -37,7 +37,7 @@ body, html {
     position: bottom;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
     border-radius: 10px;
-    padding: 20px;
+    padding: 50px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     max-width: 200px; /* Adjusts the width of the Twitter feed */
     margin: 20px auto; /* Centers the feed on the page with some margin */
