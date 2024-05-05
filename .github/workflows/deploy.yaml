@@ -27,7 +27,7 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSHKEY }}
         script: |
-          cd /home/deployuser/web/electionclock
+          cd /home/deployuser/web/ElectionClock
           git pull origin main
           sudo systemctl restart gunicorn
 
