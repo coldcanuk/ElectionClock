@@ -23,7 +23,7 @@ jobs:
     - name: SSH and Deploy to Linode
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.IPV6 }}
+        host: ${{ secrets.IPV4 }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSHKEY }}
         script: |
