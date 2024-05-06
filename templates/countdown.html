@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUlL6ANPK/ACAY/8Ae17/AJ+K/wAAAO0ALwD/AKWR/wDq5v8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmgAAAAACGYGaAAAUAAIZgZoAABQAAhmBmgAZmZgCGYGaAVmZnUIZgZok2FhY5hmBmiUVmZUmGYGaAAEZAAIZgZoAAhoAAhmBmgAACAACGYGaAAAAAAIZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAH/EAAB7xAAAe8QAAGDEAABARAAAAAQAAAAEAABxxAAAccQAAHvEAAB/xAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
-    <title>Canadian Election Countdown</title>
+    <title>Countdown Timer</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
@@ -21,13 +18,11 @@
     </div>
 
     <script>
-        // Ring Countdown Timer Script
         var ringer = {
-            countdown_to: "10/19/2025",  // Adjust the target election date
+            countdown_to: "10/19/2025", // Target election date
             rings: {
-                'YEARS': { s: 31536000000, max: 10 },
                 'MONTHS': { s: 2628000000, max: 12 },
-                'DAYS': { s: 86400000, max: 30 },
+                'DAYS': { s: 86400000, max: 7 },
                 'HOURS': { s: 3600000, max: 24 },
                 'MINUTES': { s: 60000, max: 60 },
                 'SECONDS': { s: 1000, max: 60 },
@@ -36,11 +31,11 @@
             r_count: 7,
             r_spacing: 16,
             r_size: 100,
-            r_thickness: 5, // Increased thickness for visibility
+            r_thickness: 5,
             update_interval: 22,
 
             init: function () {
-                var $r = ringer;
+                var $r = this;
                 $r.cvs = document.createElement('canvas');
                 $r.size = {
                     w: ($r.r_size + $r.r_thickness) * $r.r_count + ($r.r_spacing * ($r.r_count - 1)),
@@ -58,13 +53,15 @@
             },
             ctx: null,
             go: function () {
+                var $r = this;
                 var idx = 0;
                 $r.time = ($r.countdown_to_time) - (new Date().getTime());
                 console.log("Time remaining:", $r.time);
                 for (var r_key in $r.rings) $r.unit(idx++, r_key, $r.rings[r_key]);
-                setTimeout($r.go, $r.update_interval);
+                setTimeout($r.go.bind($r), $r.update_interval);
             },
             unit: function (idx, label, ring) {
+                var $r = this;
                 var x, y, value, ring_secs = ring.s;
                 value = parseFloat($r.time / ring_secs);
                 $r.time -= Math.round(parseInt(value)) * ring_secs;
@@ -73,25 +70,25 @@
                 x = ($r.r_size * 0.5 + $r.r_thickness * 0.5) + (idx * ($r.r_size + $r.r_spacing + $r.r_thickness));
                 y = $r.r_size * 0.5 + $r.r_thickness * 0.5;
 
-                console.log(`Drawing ${label}:`, Math.floor(value), `at (${x},${y})`);
-
                 // calculate arc end angle
                 var degrees = 360 - (value / ring.max) * 360.0;
                 var endAngle = degrees * (Math.PI / 180);
+
+                console.log(`Drawing ${label}:`, Math.floor(value), `at (${x},${y})`);
 
                 $r.ctx.save();
                 $r.ctx.translate(x, y);
                 $r.ctx.clearRect($r.actual_size * -0.5, $r.actual_size * -0.5, $r.actual_size, $r.actual_size);
 
                 // first circle (background)
-                $r.ctx.strokeStyle = "rgba(193, 1, 1, 0.747)";
+                $r.ctx.strokeStyle = "rgba(200, 200, 200, 0.3)";
                 $r.ctx.beginPath();
                 $r.ctx.arc(0, 0, $r.r_size / 2, 0, 2 * Math.PI, true);
                 $r.ctx.lineWidth = $r.r_thickness;
                 $r.ctx.stroke();
 
-                // second circle (progress)
-                $r.ctx.strokeStyle = "rgba(200, 0, 255, 1)";
+                // second circle (progress) - Changed to red
+                $r.ctx.strokeStyle = "rgba(255, 0, 0, 1)";
                 $r.ctx.beginPath();
                 $r.ctx.arc(0, 0, $r.r_size / 2, 0, endAngle, true);
                 $r.ctx.lineWidth = $r.r_thickness;

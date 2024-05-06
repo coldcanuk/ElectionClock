@@ -1,11 +1,17 @@
 body, html {
     height: 100%;
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: url('/static/images/default_bg.webp') no-repeat center center fixed; 
+    background: url('https://www.voteh.ca/static/images/default_bg.webp') no-repeat center center fixed; 
     background-size: cover;
 }
 
+#countdown-timer {
+    width: 113%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
 .countdown-container {
     position: fixed;
     top: 25%;
@@ -15,10 +21,9 @@ body, html {
     text-align: center;
     background-color: rgba(0, 0, 0, 0.3); /* Reduced opacity for better background visibility */
     border-radius: 10px;
-    padding: 20px;
+    padding: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
-
 .button-container {
     display: flex;
     align-items: center;
@@ -27,10 +32,6 @@ body, html {
 }
 
 canvas {
-    width: 900px;
-    height: 200px;
     display: block;
-    position: relative;
-    background: transparent;
     margin: 20px auto;
 }
