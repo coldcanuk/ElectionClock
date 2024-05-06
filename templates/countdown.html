@@ -20,12 +20,6 @@
         <div id="countdown-timer"></div>
     </div>
 
-    <!-- Twitter Feed -->
-    <div class="twitter-feed-container">
-        <a class="twitter-timeline" href="https://twitter.com/CanadianPolling?ref_src=twsrc%5Etfw">Tweets by CanadianPolling</a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    </div>
-
     <script>
         // Ring Countdown Timer Script
         var ringer = {
@@ -42,7 +36,7 @@
             r_count: 7,
             r_spacing: 16,
             r_size: 100,
-            r_thickness: 3,
+            r_thickness: 5, // Increased thickness for visibility
             update_interval: 22,
 
             init: function () {
@@ -55,17 +49,18 @@
                 $r.cvs.setAttribute('width', $r.size.w);
                 $r.cvs.setAttribute('height', $r.size.h);
                 $r.ctx = $r.cvs.getContext('2d');
-                $r.cvs.style.background = "transparent";
                 document.getElementById('countdown-timer').appendChild($r.cvs);
                 $r.ctx.textAlign = 'center';
                 $r.actual_size = $r.r_size + $r.r_thickness;
                 $r.countdown_to_time = new Date($r.countdown_to).getTime();
+                console.log("Canvas initialized, size:", $r.size);
                 $r.go();
             },
             ctx: null,
             go: function () {
                 var idx = 0;
                 $r.time = ($r.countdown_to_time) - (new Date().getTime());
+                console.log("Time remaining:", $r.time);
                 for (var r_key in $r.rings) $r.unit(idx++, r_key, $r.rings[r_key]);
                 setTimeout($r.go, $r.update_interval);
             },
@@ -75,10 +70,10 @@
                 $r.time -= Math.round(parseInt(value)) * ring_secs;
                 value = Math.abs(value);
 
-                x = ($r.r_size * 0.5 + $r.r_thickness * 0.5);
-                x += +(idx * ($r.r_size + $r.r_spacing + $r.r_thickness));
-                y = $r.r_size * 0.5;
-                y += $r.r_thickness * 0.5;
+                x = ($r.r_size * 0.5 + $r.r_thickness * 0.5) + (idx * ($r.r_size + $r.r_spacing + $r.r_thickness));
+                y = $r.r_size * 0.5 + $r.r_thickness * 0.5;
+
+                console.log(`Drawing ${label}:`, Math.floor(value), `at (${x},${y})`);
 
                 // calculate arc end angle
                 var degrees = 360 - (value / ring.max) * 360.0;
@@ -88,17 +83,17 @@
                 $r.ctx.translate(x, y);
                 $r.ctx.clearRect($r.actual_size * -0.5, $r.actual_size * -0.5, $r.actual_size, $r.actual_size);
 
-                // first circle
-                $r.ctx.strokeStyle = "rgba(200,0,244,0.5)";
+                // first circle (background)
+                $r.ctx.strokeStyle = "rgba(200, 200, 200, 0.3)";
                 $r.ctx.beginPath();
-                $r.ctx.arc(0, 0, $r.r_size / 2, 0, 20, 1);
+                $r.ctx.arc(0, 0, $r.r_size / 2, 0, 2 * Math.PI, true);
                 $r.ctx.lineWidth = $r.r_thickness;
                 $r.ctx.stroke();
 
-                // second circle
-                $r.ctx.strokeStyle = "rgba(200,0,255,1)";
+                // second circle (progress)
+                $r.ctx.strokeStyle = "rgba(200, 0, 255, 1)";
                 $r.ctx.beginPath();
-                $r.ctx.arc(0, 0, $r.r_size / 2, 0, endAngle, 1);
+                $r.ctx.arc(0, 0, $r.r_size / 2, 0, endAngle, true);
                 $r.ctx.lineWidth = $r.r_thickness;
                 $r.ctx.stroke();
 
