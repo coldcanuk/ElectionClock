@@ -5,14 +5,8 @@ body, html {
     background-size: cover;
 }
 
-#countdown-timer {
-    width: 113%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
 .countdown-container {
+    width: 50%;
     position: fixed;
     top: 25%;
     left: 50%;
@@ -24,11 +18,27 @@ body, html {
     padding: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
+
 .button-container {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
+}
+
+.countdown-text {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 22px;
+    color: #ffffff;
+}
+
+#countdown-timer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 canvas {

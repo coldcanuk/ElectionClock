@@ -13,6 +13,8 @@
                     frameborder="0" scrolling="0" width="170" height="30"></iframe>
             <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         </div>
+        <!-- Text Header -->
+        <h2 class="countdown-text">Until the Next Canadian Federal Election:</h2>
         <!-- Ring Countdown Timer -->
         <div id="countdown-timer"></div>
     </div>
@@ -22,6 +24,7 @@
             countdown_to: "10/19/2025", // Target election date
             rings: {
                 'MONTHS': { s: 2628000000, max: 12 },
+                'WEEKS': { s: 604800000, max: 52 },
                 'DAYS': { s: 86400000, max: 7 },
                 'HOURS': { s: 3600000, max: 24 },
                 'MINUTES': { s: 60000, max: 60 },
