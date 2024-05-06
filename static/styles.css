@@ -49,8 +49,8 @@ body, html {
 }
 
 canvas {
-    width: 900px;
-    height: 200px;
+    width: 200px;
+    height: 50px;
     display: block;
     position: relative;
     background: transparent;
