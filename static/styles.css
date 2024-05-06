@@ -6,6 +6,14 @@ body, html {
     background: url('/static/images/default_bg.webp') no-repeat center center fixed; 
     background-size: cover;
 }
+canvas {
+    width: 900px;
+    height: 200px;
+    display: block;
+    position: relative;
+    background: transparent;
+    margin: 40px auto;
+}
 .countdown-container {
     position: fixed;
     top: 25%;

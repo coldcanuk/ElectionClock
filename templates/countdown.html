@@ -2,80 +2,164 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Make it mobile friendly -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUlL6ANPK/ACAY/8Ae17/AJ+K/wAAAO0ALwD/AKWR/wDq5v8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmgAAAAACGYGaAAAUAAIZgZoAABQAAhmBmgAZmZgCGYGaAVmZnUIZgZok2FhY5hmBmiUVmZUmGYGaAAEZAAIZgZoAAhoAAhmBmgAACAACGYGaAAAAAAIZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAH/EAAB7xAAAe8QAAGDEAABARAAAAAQAAAAEAABxxAAAccQAAHvEAAB/xAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
     <title>Canadian Election Countdown</title>
     <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        canvas {
+            width: 900px;
+            height: 200px;
+            display: block;
+            position: relative;
+            background: transparent;
+            margin: 40px auto;
+        }
 
+        body {
+            background: #000000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="countdown-container">
-        <!-- Twitter button positioned like a bullet -->
+        <!-- Twitter and GitHub Buttons -->
         <div style="display: flex; align-items: center; margin-bottom: 10px;">
             <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
-            <!-- GitHub button -->
             <iframe src="https://ghbtns.com/github-btn.html?user=coldcanuk&repo=ElectionClock&type=star&count=true&size=large"
                     frameborder="0" scrolling="0" width="170" height="30" style="margin-left: 10px;"></iframe>
             <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-            <h1 id="time" style="margin-left: 10px;"></h1>
         </div>
-        <!-- The fuse container -->
-        <div id="fuse-container" style="width: 100%; height: 2px; background: black; position: relative;">
-            <div id="fuse" style="height: 100%; background: rgb(32, 23, 23); width: 100%;"></div>
+        <!-- Ring Countdown Timer -->
+        <div id="countdown-timer"></div>
+        <!-- Fuse Container -->
+        <div id="fuse-container">
+            <div id="fuse"></div>
         </div>
     </div>
 
-    <!-- Twitter timeline feed container -->
+    <!-- Twitter Feed -->
     <div class="twitter-feed-container">
         <a class="twitter-timeline" href="https://twitter.com/CanadianPolling?ref_src=twsrc%5Etfw">Tweets by CanadianPolling</a>
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
 
     <script>
-        function startCountdown(duration, display, fuse) {
-            var start = Date.now(), diff, days, hours, minutes, seconds, milliseconds, totalSeconds = duration;
+        // Ring Countdown Timer Script
+        var ringer = {
+            countdown_to: "{{ election_date }}",
+            rings: {
+                'YEARS': { s: 31536000000, max: 10 },
+                'MONTHS': { s: 2628000000, max: 12 },
+                'DAYS': { s: 86400000, max: 30 },
+                'HOURS': { s: 3600000, max: 24 },
+                'MINUTES': { s: 60000, max: 60 },
+                'SECONDS': { s: 1000, max: 60 },
+                'MICROSEC': { s: 10, max: 100 }
+            },
+            r_count: 7,
+            r_spacing: 16,
+            r_size: 100,
+            r_thickness: 3,
+            update_interval: 22,
 
-            function timer1() { // Main countdown function, updates every millisecond
-                var now = Date.now();
-                diff = duration - ((now - start) / 1000 | 0);
-                milliseconds = parseInt((now - start) % 1000, 10);
+            init: function () {
+                var $r = ringer;
+                $r.cvs = document.createElement('canvas');
+                $r.size = {
+                    w: ($r.r_size + $r.r_thickness) * $r.r_count + ($r.r_spacing * ($r.r_count - 1)),
+                    h: ($r.r_size + $r.r_thickness)
+                };
+                $r.cvs.setAttribute('width', $r.size.w);
+                $r.cvs.setAttribute('height', $r.size.h);
+                $r.ctx = $r.cvs.getContext('2d');
+                document.getElementById('countdown-timer').appendChild($r.cvs);
+                $r.cvs = $($r.cvs);
+                $r.ctx.textAlign = 'center';
+                $r.actual_size = $r.r_size + $r.r_thickness;
+                $r.countdown_to_time = new Date($r.countdown_to).getTime();
+                $r.cvs.css({ width: $r.size.w + "px", height: $r.size.h + "px" });
+                $r.go();
+            },
+            ctx: null,
+            go: function () {
+                var idx = 0;
+                $r.time = ($r.countdown_to_time) - (new Date().getTime());
+                for (var r_key in $r.rings) $r.unit(idx++, r_key, $r.rings[r_key]);
+                setTimeout($r.go, $r.update_interval);
+            },
+            unit: function (idx, label, ring) {
+                var x, y, value, ring_secs = ring.s;
+                value = parseFloat($r.time / ring_secs);
+                $r.time -= Math.round(parseInt(value)) * ring_secs;
+                value = Math.abs(value);
 
-                days = parseInt(diff / (24*60*60), 10);
-                hours = parseInt((diff % (24*60*60)) / (60*60), 10);
-                minutes = parseInt((diff % (60*60)) / 60, 10);
-                seconds = parseInt(diff % 60, 10);
+                x = ($r.r_size * 0.5 + $r.r_thickness * 0.5);
+                x += +(idx * ($r.r_size + $r.r_spacing + $r.r_thickness));
+                y = $r.r_size * 0.5;
+                y += $r.r_thickness * 0.5;
 
-                hours = hours < 10 ? "0" + hours : hours;
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-                milliseconds = milliseconds < 100 ? (milliseconds < 10 ? "00" + milliseconds : "0" + milliseconds) : milliseconds;
+                // calculate arc end angle
+                var degrees = 360 - (value / ring.max) * 360.0;
+                var endAngle = degrees * (Math.PI / 180);
 
-                display.innerHTML = `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds & ${milliseconds} milliseconds!`;
+                $r.ctx.save();
+                $r.ctx.translate(x, y);
+                $r.ctx.clearRect($r.actual_size * -0.5, $r.actual_size * -0.5, $r.actual_size, $r.actual_size);
 
-                if (diff <= 0) {
-                    clearInterval(interval1);
-                    display.innerHTML = "The countdown is over!";
-                }
+                // first circle
+                $r.ctx.strokeStyle = "rgba(200,0,244,0.5)";
+                $r.ctx.beginPath();
+                $r.ctx.arc(0, 0, $r.r_size / 2, 0, 20, 1);
+                $r.ctx.lineWidth = $r.r_thickness;
+                $r.ctx.stroke();
+
+                // second circle
+                $r.ctx.strokeStyle = "rgba(200,0,255,1)";
+                $r.ctx.beginPath();
+                $r.ctx.arc(0, 0, $r.r_size / 2, 0, endAngle, 1);
+                $r.ctx.lineWidth = $r.r_thickness;
+                $r.ctx.stroke();
+
+                // label
+                $r.ctx.fillStyle = "#ffffff";
+                $r.ctx.font = '12px Helvetica';
+                $r.ctx.fillText(label, 0, 23);
+                $r.ctx.font = 'bold 40px Helvetica';
+                $r.ctx.fillText(Math.floor(value), 0, 10);
+                $r.ctx.restore();
             }
+        }
 
-            function time1k() { // Fuse update function, updates every second
+        // Initialize the Ring Countdown Timer
+        ringer.init();
+
+        // Fuse Timer Script
+        function startFuseCountdown(duration, fuse) {
+            var start = Date.now(), diff, totalSeconds = duration;
+
+            function time1k() {
+                diff = duration - ((Date.now() - start) / 1000 | 0);
                 var percentage = (diff / totalSeconds) * 100;
                 fuse.style.width = percentage + '%';
 
                 if (diff <= 0) {
-                    fuse.style.width = '0%'; // Ensure fuse is completely "burnt"
+                    fuse.style.width = '0%';
                 }
             }
 
-            var interval1 = setInterval(timer1, 1); // Update every millisecond
-            var interval1k = setInterval(time1k, 1000); // Update every second
+            setInterval(time1k, 1000);
         }
 
         window.onload = function () {
             var countdownTime = {{ time_left.total_seconds()|safe }};
-            var display = document.querySelector('#time');
             var fuse = document.querySelector('#fuse');
-            startCountdown(countdownTime, display, fuse);
+            startFuseCountdown(countdownTime, fuse);
         };
     </script>
 </body>
