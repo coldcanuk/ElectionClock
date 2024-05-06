@@ -6,9 +6,8 @@ body, html {
 }
 
 .countdown-container {
-    width: 50%;
     position: fixed;
-    top: 25%;
+    top: 15%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
@@ -34,11 +33,46 @@ body, html {
 }
 
 #countdown-timer {
-    width: 100%;
+    width: 113%;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+.twitter-feed-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20%;
+    height: 400px;
+    color: white;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.3); /* Reduced opacity for better background visibility */
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    overflow-y: scroll;
+}
+
+/* Custom Scrollbar */
+.twitter-feed-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.twitter-feed-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.twitter-feed-container::-webkit-scrollbar-thumb {
+    background: rgba(5, 0, 0, 0.7); /* Red color for the scrollbar */
+    border-radius: 10px;
+}
+
+.twitter-feed-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 0, 0, 1);
 }
 
 canvas {
