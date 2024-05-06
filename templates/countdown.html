@@ -10,18 +10,14 @@
 <body>
     <div class="countdown-container">
         <!-- Twitter and GitHub Buttons -->
-        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <div class="button-container">
             <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
             <iframe src="https://ghbtns.com/github-btn.html?user=coldcanuk&repo=ElectionClock&type=star&count=true&size=large"
-                    frameborder="0" scrolling="0" width="170" height="30" style="margin-left: 10px;"></iframe>
+                    frameborder="0" scrolling="0" width="170" height="30"></iframe>
             <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         </div>
         <!-- Ring Countdown Timer -->
         <div id="countdown-timer"></div>
-        <!-- Fuse Container -->
-        <div id="fuse-container">
-            <div id="fuse"></div>
-        </div>
     </div>
 
     <!-- Twitter Feed -->
@@ -118,29 +114,6 @@
 
         // Initialize the Ring Countdown Timer
         ringer.init();
-
-        // Fuse Timer Script
-        function startFuseCountdown(duration, fuse) {
-            var start = Date.now(), diff, totalSeconds = duration;
-
-            function time1k() {
-                diff = duration - ((Date.now() - start) / 1000 | 0);
-                var percentage = (diff / totalSeconds) * 100;
-                fuse.style.width = percentage + '%';
-
-                if (diff <= 0) {
-                    fuse.style.width = '0%';
-                }
-            }
-
-            setInterval(time1k, 1000);
-        }
-
-        window.onload = function () {
-            var countdownTime = (new Date("10/19/2025") - new Date()) / 1000;
-            var fuse = document.querySelector('#fuse');
-            startFuseCountdown(countdownTime, fuse);
-        };
     </script>
 </body>
 </html>
