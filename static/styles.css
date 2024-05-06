@@ -6,14 +6,7 @@ body, html {
     background: url('/static/images/default_bg.webp') no-repeat center center fixed; 
     background-size: cover;
 }
-canvas {
-    width: 900px;
-    height: 200px;
-    display: block;
-    position: relative;
-    background: transparent;
-    margin: 40px auto;
-}
+
 .countdown-container {
     position: fixed;
     top: 25%;
@@ -53,4 +46,13 @@ canvas {
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     max-width: 400px; /* Adjusts the width of the Twitter feed */
     margin: 20px auto; /* Centers the feed on the page with some margin */
+}
+
+canvas {
+    width: 900px;
+    height: 200px;
+    display: block;
+    position: relative;
+    background: transparent;
+    margin: 40px auto;
 }

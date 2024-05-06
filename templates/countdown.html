@@ -52,7 +52,7 @@
     <script>
         // Ring Countdown Timer Script
         var ringer = {
-            countdown_to: "{{ election_date }}",
+            countdown_to: "10/19/2025",  // Adjust the target election date
             rings: {
                 'YEARS': { s: 31536000000, max: 10 },
                 'MONTHS': { s: 2628000000, max: 12 },
@@ -79,11 +79,9 @@
                 $r.cvs.setAttribute('height', $r.size.h);
                 $r.ctx = $r.cvs.getContext('2d');
                 document.getElementById('countdown-timer').appendChild($r.cvs);
-                $r.cvs = $($r.cvs);
                 $r.ctx.textAlign = 'center';
                 $r.actual_size = $r.r_size + $r.r_thickness;
                 $r.countdown_to_time = new Date($r.countdown_to).getTime();
-                $r.cvs.css({ width: $r.size.w + "px", height: $r.size.h + "px" });
                 $r.go();
             },
             ctx: null,
@@ -157,7 +155,7 @@
         }
 
         window.onload = function () {
-            var countdownTime = {{ time_left.total_seconds()|safe }};
+            var countdownTime = (new Date("10/19/2025") - new Date()) / 1000;
             var fuse = document.querySelector('#fuse');
             startFuseCountdown(countdownTime, fuse);
         };
