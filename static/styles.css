@@ -1,4 +1,3 @@
-/* styles.css */
 body, html {
     height: 100%;
     margin: 0;
@@ -6,7 +5,6 @@ body, html {
     background: url('/static/images/default_bg.webp') no-repeat center center fixed; 
     background-size: cover;
 }
-
 .countdown-container {
     position: fixed;
     top: 25%;
@@ -49,8 +47,8 @@ body, html {
 }
 
 canvas {
-    width: 200px;
-    height: 50px;
+    width: 900px;
+    height: 200px;
     display: block;
     position: relative;
     background: transparent;

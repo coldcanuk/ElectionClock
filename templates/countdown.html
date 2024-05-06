@@ -6,25 +6,6 @@
     <link href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUlL6ANPK/ACAY/8Ae17/AJ+K/wAAAO0ALwD/AKWR/wDq5v8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmgAAAAACGYGaAAAUAAIZgZoAABQAAhmBmgAZmZgCGYGaAVmZnUIZgZok2FhY5hmBmiUVmZUmGYGaAAEZAAIZgZoAAhoAAhmBmgAACAACGYGaAAAAAAIZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAH/EAAB7xAAAe8QAAGDEAABARAAAAAQAAAAEAABxxAAAccQAAHvEAAB/xAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
     <title>Canadian Election Countdown</title>
     <link rel="stylesheet" href="/static/styles.css">
-    <style>
-        canvas {
-            width: 900px;
-            height: 200px;
-            display: block;
-            position: relative;
-            background: transparent;
-            margin: 40px auto;
-        }
-
-        body {
-            background: #000000;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
     <div class="countdown-container">
@@ -78,6 +59,7 @@
                 $r.cvs.setAttribute('width', $r.size.w);
                 $r.cvs.setAttribute('height', $r.size.h);
                 $r.ctx = $r.cvs.getContext('2d');
+                $r.cvs.style.background = "transparent";
                 document.getElementById('countdown-timer').appendChild($r.cvs);
                 $r.ctx.textAlign = 'center';
                 $r.actual_size = $r.r_size + $r.r_thickness;
