@@ -1,3 +1,4 @@
+# .github/workflows/deploy.yaml
 name: Deploy Flask App to Linode
 
 on:
@@ -18,14 +19,17 @@ jobs:
         python-version: '3.8'
 
     - name: Install Dependencies
-      run:
+      run: |
         pip install --upgrade pip
         pip install -r requirements.txt
-    
+
     - name: Activate Virtual Environment
       run: |
         python -m venv venv
         source venv/bin/activate
+
+    - name: Set Environment Variables
+      run: echo "AUTHME=${{ secrets.AUTHME }}" >> $GITHUB_ENV
 
     - name: SSH and Deploy to Linode
       uses: appleboy/ssh-action@master
@@ -41,4 +45,3 @@ jobs:
           sudo systemctl status gunicorn
     - name: Clean Up Post-Deployment
       run: echo "Deployment Complete and Services Restarted"
-

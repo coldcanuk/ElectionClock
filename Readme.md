@@ -91,6 +91,12 @@ Make sure you can log in without issues using the SSH key.
 
 By following these steps, you create a secure user environment that minimizes the risk of root access exploits and ensures that administrative tasks can be handled safely. Make sure to use this user for your deployment processes.
 
+### Scheduled Maintenance and Data Updates
+The `maestro.py` script will be run once a week to ensure all law data is up to date. This is managed by the crontab scheduler.
+Run the crontab setup script:
+```bash
+./update_law_crontab.sh
+```
 ## Contributing
 Feel free to fork this repository and submit pull requests to contribute to its development.
 
