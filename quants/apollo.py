@@ -29,7 +29,6 @@ def analyze_chunk_in_thread(chunk, assistant_id=asst_keiko):
                 ]
             }
         )
-
         # Wait for the run to complete
         thread_id = run.thread_id
         run_id = run.id
