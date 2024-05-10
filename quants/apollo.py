@@ -104,18 +104,10 @@ def analyze_chunks_from_vector_store():
     output = {}
     intLoop = 0
     for i, chunk in enumerate(chunks, 1):
-        logger.debug(f"Being loop at interation {intLoop}")
+        logger.debug(f"Begin loop at interation {intLoop}")
         try:
             analysis = analyze_chunk_in_thread(chunk)
-            output[f"Analysis of Chunk {i}"] = {
-                "TextContentBlock": {
-                    "text": {
-                        "annotations": [],
-                        "value": analysis,
-                        "type": "text"
-                    }
-                }
-            }
+            output[f"Analysis of Chunk {i}"] = {analysis}
             logger.debug(f"### Analysis of Chunk {i}:\n{analysis}\n\n")
             intLoop += 1
         except Exception as e:
