@@ -3,6 +3,7 @@ import os
 import sys
 import time
 from dotenv import load_dotenv
+from loguru import logger
 
 # Add the root directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -12,7 +13,17 @@ from quants.tsionhehkwen import search_documents
 # Load environment variables from the .env file
 env_path =  os.getenv('HOME') + "/web/ElectionClockEnvironment/.env"
 load_dotenv(dotenv_path=env_path)
+# Determine if the application is running in debug mode based on environment variable
+DEBUG_MODE = os.getenv('DEBUG_MODE', 'False').lower() in ('true', '1', 't', 'y')
 
+# Set the logging level based on whether the application is in debug mode
+log_level = "DEBUG" if DEBUG_MODE else "INFO"
+
+# Set up logger
+logger.remove()
+logger.add(sys.stdout, level=log_level)
+logger.info("Begin apollo")
+logger.debug("Debug mode on")
 # Retrieve Keiko's assistant ID and OpenAI API key
 #asst_keiko = os.getenv("id_KEIKO")
 asst_keiko = os.environ.get("id_KEIKO")
@@ -37,12 +48,12 @@ def analyze_chunk_in_thread(chunk, assistant_id=asst_keiko):
         intLoop = 0
         sleep_time = 10
         while True:
-            print(f"in the while loop at iteration: {intLoop} and sleep timer of {sleep_time}")
+            logger.debug(f"in the while loop at iteration: {intLoop} and sleep timer of {sleep_time}")
             status = openai.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id).status
-            print(f"the status: {status}, thread_id: {thread_id}, run_id: {run_id}")
+            logger.debug(f"the status: {status}, thread_id: {thread_id}, run_id: {run_id}")
             
             if status == "completed":
-                print(f"{status} matched completed")
+                logger.debug(f"{status} matched completed")
                 break
             elif status in ["failed", "cancelled"]:
                 raise Exception(f"Run failed or was cancelled. Status: {status}")
@@ -72,6 +83,7 @@ def analyze_chunks_from_vector_store():
     results = search_documents("C-70_E", n_results=1)
     if not results["documents"]:
         raise ValueError("Document C-70_E not found in Tsionhehkwen")
+        logger.debug("Document C-70_E not found in Tsionhehkwen")
     document = results["documents"][0]
 
     # Split the document into chunks
@@ -84,8 +96,10 @@ def analyze_chunks_from_vector_store():
         try:
             analysis = analyze_chunk_in_thread(chunk)
             output.append(f"### Analysis of Chunk {i}:\n{analysis}\n\n")
+            logger.debug(f"### Analysis of Chunk {i}:\n{analysis}\n\n")
         except Exception as e:
             output.append(f"### Analysis of Chunk {i} Failed:\n{e}\n\n")
+            logger.debug(f"### Analysis of Chunk {i} Failed:\n{e}\n\n")
 
     # Save the complete analysis to a file
     output_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "extractors/taillings/analysis.txt")

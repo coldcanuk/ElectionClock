@@ -1,29 +1,56 @@
 # maestro.py
+import sys
 import os
 import subprocess
 from datetime import datetime
-from quants.tsionhehkwen import add_chunks_to_vector_store, get_analysis_results
+from quants.tsionhehkwen import add_documents
+from loguru import logger
 from dotenv import load_dotenv
 
-# Load environment variables
-env_path =  os.getenv('HOME') + "/web/ElectionClockEnvironment/.env"
-load_dotenv(dotenv_path=env_path)
 # Constants
-BILL_NAME = "C-70_E"
-TEXT_FILE_PATH = f"extractors/taillings/{BILL_NAME}.txt"
-ANALYSIS_FILE_PATH = f"extractors/taillings/{BILL_NAME}_analysis.txt"
+TEXT_FILE_PATH = "extractors/taillings/C-70_E.txt"
 MAX_FILE_AGE_DAYS = 30
+
+# Add the root directory to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+# Load environment variables from the .env file
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ElectionClockEnvironment/.env')
+load_dotenv(dotenv_path=env_path)
+
+# Determine if the application is running in debug mode based on environment variable
+DEBUG_MODE = os.getenv('DEBUG_MODE', 'False').lower() in ('true', '1', 't', 'y')
+
+# Set the logging level based on whether the application is in debug mode
+log_level = "DEBUG" if DEBUG_MODE else "INFO"
+
+# Set up logger
+logger.remove()
+logger.add(sys.stdout, level=log_level)
+logger.info("Begin maestro")
+logger.debug("Debug mode on")
 
 # Function to execute xml2text.py
 def run_extractor():
     try:
         result = subprocess.run(["python3", "extractors/xml2text.py"], capture_output=True, text=True)
         if result.returncode != 0:
-            print(f"Error in xml2text.py: {result.stderr}")
+            logger.error(f"Error in xml2text.py: {result.stderr}")
         else:
-            print(result.stdout)
+            logger.info(result.stdout)
     except Exception as e:
-        print(f"Failed to run xml2text.py: {e}")
+        logger.error(f"Failed to run xml2text.py: {e}")
+
+# Function to execute apollo.py
+def run_analysis():
+    try:
+        result = subprocess.run(["python3", "quants/apollo.py"], capture_output=True, text=True)
+        if result.returncode != 0:
+            logger.error(f"Error in apollo.py: {result.stderr}")
+        else:
+            logger.info(result.stdout)
+    except Exception as e:
+        logger.error(f"Failed to run apollo.py: {e}")
 
 # Check if the text file exists and is less than a month old
 def is_text_file_valid(file_path, max_age_days=30):
@@ -36,20 +63,13 @@ def is_text_file_valid(file_path, max_age_days=30):
 def add_to_vector_store(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         document = f.read()
-    add_chunks_to_vector_store(document, doc_id=BILL_NAME)
+    add_documents([document], ids=["C-70_E"])
 
-# Update law data function
-def update_law_data():
+# Main function
+if __name__ == "__main__":
     if not is_text_file_valid(TEXT_FILE_PATH, MAX_FILE_AGE_DAYS):
         run_extractor()
         add_to_vector_store(TEXT_FILE_PATH)
     else:
-        print(f"{BILL_NAME}.txt is valid. No need to download and parse.")
-    
-    analysis = get_analysis_results(f"{BILL_NAME}_Analysis", n_results=1)
-    with open(ANALYSIS_FILE_PATH, "w", encoding="utf-8") as f:
-        f.write(f"### Analysis of Chunk 1:\n{analysis}")
-
-# Main function
-if __name__ == "__main__":
-    update_law_data()
+        logger.info("C-70_E.txt is valid. No need to download and parse.")
+    run_analysis()
