@@ -102,7 +102,9 @@ def analyze_chunks_from_vector_store():
     # Analyze each chunk
     logger.info("Analyze each chunk")
     output = {}
+    intLoop = 0
     for i, chunk in enumerate(chunks, 1):
+        logger.debug(f"Being loop at interation {intLoop}")
         try:
             analysis = analyze_chunk_in_thread(chunk)
             output[f"Analysis of Chunk {i}"] = {
@@ -115,6 +117,7 @@ def analyze_chunks_from_vector_store():
                 }
             }
             logger.debug(f"### Analysis of Chunk {i}:\n{analysis}\n\n")
+            intLoop += 1
         except Exception as e:
             output[f"Analysis of Chunk {i}"] = f"Analysis of Chunk {i} Failed: {e}"
             logger.debug(f"### Analysis of Chunk {i} Failed:\n{e}\n\n")
