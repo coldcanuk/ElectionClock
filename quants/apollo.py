@@ -39,49 +39,38 @@ if not openai.api_key:
 # Function to analyze a chunk via Keiko's thread
 def analyze_chunk_in_thread(chunk, assistant_id=asst_keiko):
     try:
-        # Create and run a new thread
         run = openai.beta.threads.create_and_run(
             assistant_id=assistant_id,
-            thread={
-                "messages": [
-                    {"role": "user", "content": f"Analyze this section:\n\n{chunk}"}
-                ]
-            }
+            thread={"messages": [{"role": "user", "content": f"Analyze this section:\n\n{chunk}"}]}
         )
-        thread_id = run.thread_id
-        run_id = run.id
-        intLoop = 0
-        sleep_time = 10
-
         while True:
-            status = openai.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id).status
-            logger.debug(f"Thread status: {status}, thread_id: {thread_id}, run_id: {run_id}")
-
+            status = openai.beta.threads.runs.retrieve(run.thread_id, run.id).status
             if status == "completed":
                 break
             elif status in ["failed", "cancelled"]:
                 raise Exception(f"Run failed or was cancelled. Status: {status}")
-            time.sleep(sleep_time)
-            intLoop += 1
-            sleep_time += 2
+            time.sleep(10)
 
-        # Retrieve and return the relevant message(s)
         thread_messages = openai.beta.threads.messages.list(
-            thread_id=thread_id,
-            run_id=run_id,
+            thread_id=run.thread_id,
+            run_id=run.id,
             order="asc",
             limit=1
         )
 
         if thread_messages.data:
+            # Assuming the response content is in the first item of the list
             response_content = thread_messages.data[0].content
-        else:
-            response_content = "No response found"
+            if isinstance(response_content, list):
+                # Handle list data here
+                response_dict = {"analysis": response_content}  # Convert list to dictionary if necessary
+                return response_dict
+            else:
+                return {"error": "Unexpected data type"}
 
-        return response_content
     except Exception as e:
         logger.error(f"Thread Analysis Failed: {e}")
-        return f"Thread Analysis Failed: {e}"
+        return {"error": str(e)}
 
 # Function to analyze chunks in the vector store
 def analyze_chunks_from_vector_store():
@@ -107,18 +96,18 @@ def analyze_chunks_from_vector_store():
         logger.debug(f"Begin loop at iteration {intLoop}")
         try:
             analysis = analyze_chunk_in_thread(chunk)
-            logger.debug(f"The type for analysis is:   {type(analysis)}")
-            # Assuming `analysis` is a JSON string, convert it to a dictionary
-            analysis_dict = json.loads(analysis)  # Convert JSON string to dictionary
-            output[f"Analysis of Chunk {i}"] = {
-                "TextContentBlock": {
-                    "text": {
-                        "annotations": [],
-                        "value": analysis_dict,
-                        "type": "text"
+            if isinstance(analysis, dict):  # Check if the analysis is already a dictionary
+                output[f"Analysis of Chunk {i}"] = {
+                    "TextContentBlock": {
+                        "text": {
+                            "annotations": [],
+                            "value": analysis,  # Directly use the dictionary
+                            "type": "text"
+                        }
                     }
                 }
-            }
+            else:
+                raise ValueError("Analysis is not in the expected format.")
             logger.debug(f"### Analysis of Chunk {i}:\n{analysis}\n\n")
             intLoop += 1
         except Exception as e:
