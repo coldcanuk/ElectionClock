@@ -21,6 +21,7 @@ load_dotenv(dotenv_path=env_path)
 
 # Determine if the application is running in debug mode based on environment variable
 DEBUG_MODE = os.getenv('DEBUG_MODE', 'False').lower() in ('true', '1', 't', 'y')
+logger.info(f"The debug_mode is: {DEBUG_MODE}")
 
 # Set the logging level based on whether the application is in debug mode
 log_level = "DEBUG" if DEBUG_MODE else "INFO"
@@ -29,7 +30,6 @@ log_level = "DEBUG" if DEBUG_MODE else "INFO"
 logger.remove()
 logger.add(sys.stdout, level=log_level)
 logger.info("Begin maestro")
-logger.info(f"The debug_mode is: {DEBUG_MODE}")
 logger.debug("Debug mode on")
 
 # Function to execute xml2text.py
@@ -63,27 +63,21 @@ def is_text_file_valid(file_path, max_age_days=30):
 
 # Add document to vector store
 def add_to_vector_store(file_path, chunk_size=2000):
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            document = f.read()
+    with open(file_path, "r", encoding="utf-8") as f:
+        document = f.read()
 
-        # Split the document into chunks
-        chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
-        ids = [f"C-70_E_{i+1}" for i in range(len(chunks))]
-        logger.debug(f"Chunked document into {len(chunks)} chunks.")
-        add_documents(chunks, ids=ids)
-        logger.info("Documents added to vector store successfully.")
-    except Exception as e:
-        logger.error(f"Error in add_to_vector_store: {e}")
+    # Split the document into chunks
+    chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
+    ids = [f"C-70_E_{i+1}" for i in range(len(chunks))]
+
+    logger.debug(f"Chunking document into {len(chunks)} chunks.")
+    add_documents(chunks, ids=ids)
 
 # Main function
 if __name__ == "__main__":
-    try:
-        if not is_text_file_valid(TEXT_FILE_PATH, MAX_FILE_AGE_DAYS):
-            run_extractor()
-            add_to_vector_store(TEXT_FILE_PATH, CHUNK_SIZE)
-        else:
-            logger.info("C-70_E.txt is valid. No need to download and parse.")
-        run_analysis()
-    except Exception as e:
-        logger.error(f"Error in maestro execution: {e}")
+    if not is_text_file_valid(TEXT_FILE_PATH, MAX_FILE_AGE_DAYS):
+        run_extractor()
+        add_to_vector_store(TEXT_FILE_PATH, CHUNK_SIZE)
+    else:
+        logger.info("C-70_E.txt is valid. No need to download and parse.")
+    run_analysis()
