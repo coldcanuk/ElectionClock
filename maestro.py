@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 # Constants
 TEXT_FILE_PATH = "extractors/taillings/C-70_E.txt"
 MAX_FILE_AGE_DAYS = 30
+CHUNK_SIZE = 2000  # Adjust this chunk size as needed
 
 # Add the root directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -60,16 +61,28 @@ def is_text_file_valid(file_path, max_age_days=30):
     return False
 
 # Add document to vector store
-def add_to_vector_store(file_path):
-    with open(file_path, "r", encoding="utf-8") as f:
-        document = f.read()
-    add_documents([document], ids=["C-70_E"])
+def add_to_vector_store(file_path, chunk_size=2000):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            document = f.read()
+
+        # Split the document into chunks
+        chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
+        ids = [f"C-70_E_{i+1}" for i in range(len(chunks))]
+
+        add_documents(chunks, ids=ids)
+        logger.info("Documents added to vector store successfully.")
+    except Exception as e:
+        logger.error(f"Error in add_to_vector_store: {e}")
 
 # Main function
 if __name__ == "__main__":
-    if not is_text_file_valid(TEXT_FILE_PATH, MAX_FILE_AGE_DAYS):
-        run_extractor()
-        add_to_vector_store(TEXT_FILE_PATH)
-    else:
-        logger.info("C-70_E.txt is valid. No need to download and parse.")
-    run_analysis()
+    try:
+        if not is_text_file_valid(TEXT_FILE_PATH, MAX_FILE_AGE_DAYS):
+            run_extractor()
+            add_to_vector_store(TEXT_FILE_PATH, CHUNK_SIZE)
+        else:
+            logger.info("C-70_E.txt is valid. No need to download and parse.")
+        run_analysis()
+    except Exception as e:
+        logger.error(f"Error in maestro execution: {e}")
