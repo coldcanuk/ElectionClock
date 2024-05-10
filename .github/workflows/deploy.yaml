@@ -28,9 +28,11 @@ jobs:
         python -m venv venv
         source venv/bin/activate
 
-    - name: Set Environment Variables
+    - name: Set Environment Variable AUTHME
       run: echo "AUTHME=${{ secrets.AUTHME }}" >> $GITHUB_ENV
+    - name: Set Environment Variable keyOPENAI
       run: echo "keyOPENAI=${{ secrets.keyOPENAI }}" >> $GITHUB_ENV
+    - name: Set Environment Variable id_KEIKO
       run: echo "id_KEIKO=${{ secrets.id_KEIKO }}" >> $GITHUB_ENV
 
     - name: SSH and Deploy to Linode
