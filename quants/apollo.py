@@ -93,7 +93,10 @@ def analyze_chunks_from_vector_store():
 
     # Split the document into chunks
     chunk_size = 3500
-    chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
+    try:
+        chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
+    except Exception as e:
+        logger.error(f"failed chunks!!:  {e}")
 
     # Analyze each chunk
     logger.info("Analyze each chunk")
@@ -101,10 +104,18 @@ def analyze_chunks_from_vector_store():
     for i, chunk in enumerate(chunks, 1):
         try:
             analysis = analyze_chunk_in_thread(chunk)
-            output.append(f"### Analysis of Chunk {i}:\n{analysis}\n\n")
+            output[f"Analysis of Chunk {i}"] = {
+                "TextContentBlock": {
+                    "text": {
+                        "annotations": [],
+                        "value": analysis,
+                        "type": "text"
+                    }
+                }
+            }
             logger.debug(f"### Analysis of Chunk {i}:\n{analysis}\n\n")
         except Exception as e:
-            output.append(f"### Analysis of Chunk {i} Failed:\n{e}\n\n")
+            output[f"Analysis of Chunk {i}"] = f"Analysis of Chunk {i} Failed: {e}"
             logger.debug(f"### Analysis of Chunk {i} Failed:\n{e}\n\n")
 
     # Save the complete analysis to a file
