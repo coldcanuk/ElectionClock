@@ -28,12 +28,18 @@ jobs:
         python -m venv venv
         source venv/bin/activate
 
-    - name: Set Environment Variable AUTHME
-      run: echo "AUTHME=${{ secrets.AUTHME }}" >> $GITHUB_ENV
-    - name: Set Environment Variable keyOPENAI
-      run: echo "keyOPENAI=${{ secrets.keyOPENAI }}" >> $GITHUB_ENV
-    - name: Set Environment Variable id_KEIKO
-      run: echo "id_KEIKO=${{ secrets.id_KEIKO }}" >> $GITHUB_ENV
+    - name: Create .env File in ElectionClockEnvironment
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.IPV4 }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSHKEY }}
+        script: |
+          mkdir -p /home/deployuser/web/ElectionClockEnvironment
+          echo "keyOPENAI=${{ secrets.keyOPENAI }}" > /home/deployuser/web/ElectionClockEnvironment/.env
+          echo "AUTHME=${{ secrets.AUTHME }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
+          echo "AUTHME=${{ secrets.AUTHME }}" >> $GITHUB_ENV
+          echo "id_KEIKO=${{ secrets.id_KEIKO }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
 
     - name: SSH and Deploy to Linode
       uses: appleboy/ssh-action@master
