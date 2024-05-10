@@ -8,7 +8,12 @@ from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 # Load environment variables from the .env file
-load_dotenv()
+env_path = os.path.join(os.getenv('HOME'), "web/ElectionClockEnvironment/.env")
+
+if not os.path.isfile(env_path):
+    raise ValueError(f".env file not found at {env_path}. Please ensure the file exists.")
+
+load_dotenv(dotenv_path=env_path)
 
 # Retrieve OpenAI API Key
 openai_api_key = os.getenv("keyOPENAI")
