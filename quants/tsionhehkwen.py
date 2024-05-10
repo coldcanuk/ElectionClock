@@ -7,16 +7,18 @@ from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
 # Load environment variables from the .env file
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ElectionClockEnvironment/.env')
 load_dotenv(dotenv_path=env_path)
-
 # Ensure the vector store directory exists
 vector_store_directory = "quants/vector_store"
 os.makedirs(vector_store_directory, exist_ok=True)
-
 # Initialize the ChromaDB client with disk persistence
 client = chromadb.PersistentClient(path=vector_store_directory)
+# Retrieve the OpenAI key
+openai_key = os.getenv("keyOPENAI")
+if not openai_key:
+    raise ValueError("OpenAI API key not found. Please set 'keyOPENAI' in the environment variables.")
 
 # Use OpenAI's `text-embedding-ada-002` model
-embedding_function = OpenAIEmbeddingFunction(api_key=os.getenv("keyOPENAI"), model_name="text-embedding-ada-002")
+embedding_function = OpenAIEmbeddingFunction(api_key=openai_key, model_name="text-embedding-ada-002")
 
 # Retrieve or create the collection
 collection = client.get_or_create_collection(
