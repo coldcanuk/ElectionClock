@@ -44,7 +44,9 @@ def analyze_chunk_in_thread(chunk, assistant_id=asst_keiko):
             thread={"messages": [{"role": "user", "content": f"Analyze this section:\n\n{chunk}"}]}
         )
         while True:
-            status = openai.beta.threads.runs.retrieve(run.thread_id, run.id).status
+            #status = openai.beta.threads.runs.retrieve(run.thread_id, run.id).status
+            status = openai.beta.threads.runs.retrieve(run_id=run.id).status
+
             if status == "completed":
                 break
             elif status in ["failed", "cancelled"]:
