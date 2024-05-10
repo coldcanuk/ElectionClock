@@ -1,5 +1,7 @@
 # generate_analysis_html.py
 import os
+import json
+import re
 
 # Directory paths
 project_root = os.path.dirname(os.path.dirname(__file__))
@@ -7,11 +9,53 @@ taillings_dir = os.path.join(project_root, "extractors/taillings")
 html_output_dir = os.path.join(project_root, "templates")
 print(f"The project root directory is: {project_root}")
 
+# Utility function to parse analysis content
+def parse_analysis_content(analysis_file):
+    with open(analysis_file, "r", encoding="utf-8") as file:
+        content = file.read()
+
+    # Extract JSON-like content using regular expressions
+    json_match = re.search(r'\'({.*})\'', content, re.DOTALL)
+    json_str = json_match.group(1).replace("\'", "\"") if json_match else '{}'
+
+    # Convert to dictionary
+    try:
+        analysis_data = json.loads(json_str)
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
+        analysis_data = {}
+
+    return analysis_data
+
 # Utility function to read analysis file and generate HTML
 def generate_analysis_html(analysis_file, bill_name):
-    # Read analysis text content
-    with open(analysis_file, "r", encoding="utf-8") as file:
-        analysis_content = file.read()
+    # Parse the analysis content
+    analysis_data = parse_analysis_content(analysis_file)
+
+    # Extract data from the analysis dictionary
+    analysis = analysis_data.get("Analysis", {})
+    perspectives = analysis_data.get("Philosophical Perspectives", {})
+    part1 = analysis.get("Part 1", {})
+    part2 = analysis.get("Part 2", {})
+
+    Individual_Heart_Score = part1.get("Individual_Heart Score Analysis", {}).get("Score", "N/A")
+    Individual_Heart_Explanation = part1.get("Individual_Heart Score Analysis", {}).get("Explanation", "N/A")
+    Borg_Collective_Score = part1.get("Borg_Collective Score Analysis", {}).get("Score", "N/A")
+    Borg_Collective_Explanation = part1.get("Borg_Collective Score Analysis", {}).get("Explanation", "N/A")
+
+    Part1_Key_Amendments = part1.get("Key Amendments", [])
+
+    Individual_Heart_Score2 = part2.get("Individual_Heart Score Analysis", {}).get("Score", "N/A")
+    Individual_Heart_Explanation2 = part2.get("Individual_Heart Score Analysis", {}).get("Explanation", "N/A")
+    Borg_Collective_Score2 = part2.get("Borg_Collective Score Analysis", {}).get("Score", "N/A")
+    Borg_Collective_Explanation2 = part2.get("Borg_Collective Score Analysis", {}).get("Explanation", "N/A")
+
+    Part2_Key_Amendments = part2.get("Key Amendments", [])
+
+    persAynRand = perspectives.get("Ayn Rand", "N/A")
+    persThomasSowell = perspectives.get("Thomas Sowell", "N/A")
+    persVoltaire = perspectives.get("Voltaire", "N/A")
+    persKarlMarx = perspectives.get("Karl Marx", "N/A")
 
     # Create HTML content based on the layout
     html_content = f"""
@@ -35,20 +79,39 @@ def generate_analysis_html(analysis_file, bill_name):
                 <div class="ring">Seconds</div>
                 <div class="ring">Milliseconds</div>
             </div>
-            <!-- Analysis Text -->
+            <!-- Analysis Content -->
             <div class="analysis-content">
-                {analysis_content}
-            </div>
-            <!-- Characters and Portraits -->
-            <div class="character-content">
-                <div class="character-portrait">Portrait of Character</div>
-                <div class="character-description">The character's words go here</div>
-                <div class="character-portrait">Portrait of Character</div>
-                <div class="character-description">The character's words go here</div>
-                <div class="character-portrait">Portrait of Character</div>
-                <div class="character-description">The character's words go here</div>
-                <div class="character-portrait">Portrait of Character</div>
-                <div class="character-description">The character's words go here</div>
+                <h2>Individual Heart Analysis - Part 1</h2>
+                <p><strong>Score:</strong> {Individual_Heart_Score}</p>
+                <p>{Individual_Heart_Explanation}</p>
+
+                <h2>Borg Collective Analysis - Part 1</h2>
+                <p><strong>Score:</strong> {Borg_Collective_Score}</p>
+                <p>{Borg_Collective_Explanation}</p>
+
+                <h2>Key Amendments - Part 1</h2>
+                <ul>
+                    {"".join(f"<li>{amendment}</li>" for amendment in Part1_Key_Amendments)}
+                </ul>
+
+                <h2>Individual Heart Analysis - Part 2</h2>
+                <p><strong>Score:</strong> {Individual_Heart_Score2}</p>
+                <p>{Individual_Heart_Explanation2}</p>
+
+                <h2>Borg Collective Analysis - Part 2</h2>
+                <p><strong>Score:</strong> {Borg_Collective_Score2}</p>
+                <p>{Borg_Collective_Explanation2}</p>
+
+                <h2>Key Amendments - Part 2</ul>
+                <ul>
+                    {"".join(f"<li>{amendment}</li>" for amendment in Part2_Key_Amendments)}
+                </ul>
+
+                <h2>Philosophical Perspectives</h2>
+                <p><strong>Ayn Rand:</strong> {persAynRand}</p>
+                <p><strong>Thomas Sowell:</strong> {persThomasSowell}</p>
+                <p><strong>Voltaire:</strong> {persVoltaire}</p>
+                <p><strong>Karl Marx:</strong> {persKarlMarx}</p>
             </div>
         </div>
         <script>
@@ -102,16 +165,16 @@ def generate_analysis_html(analysis_file, bill_name):
                     value = Math.abs(value);
 
                     x = ($r.r_size * 0.5 + $r.r_thickness * 0.5) + (idx * ($r.r_size + $r.r_spacing + $r.r_thickness));
-                    y = $r.r_size * 0.5 + $r.r_thickness * 0.5;
+                    y = $r.r_size * 0.5 + $r.thickness;
 
-                    // calculate arc end angle
                     var degrees = 360 - (value / ring.max) * 360.0;
                     var endAngle = degrees * (Math.PI / 180);
 
-                    console.log('Drawing ' + label + ':', Math.floor(value), 'at (' + x + ',' + y + ')');
+                    console.log(`Drawing {label}:`, Math.floor(value), `at ({x},{y})`);
 
                     $r.ctx.save();
                     $r.ctx.translate(x, y);
+                    $r.ctx.clearRect($r.actual_size * -0.5, $r.actual_size * -0.5);
                     $r.ctx.clearRect($r.actual_size * -0.5, $r.actual_size * -0.5, $r.actual_size, $r.actual_size);
 
                     // first circle (background)
@@ -121,7 +184,7 @@ def generate_analysis_html(analysis_file, bill_name):
                     $r.ctx.lineWidth = $r.r_thickness;
                     $r.ctx.stroke();
 
-                    // second circle (progress) - Changed to red
+                    // second circle (progress)
                     $r.ctx.strokeStyle = "rgba(255, 0, 0, 1)";
                     $r.ctx.beginPath();
                     $r.ctx.arc(0, 0, $r.r_size / 2, 0, endAngle, true);
