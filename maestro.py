@@ -29,6 +29,7 @@ log_level = "DEBUG" if DEBUG_MODE else "INFO"
 logger.remove()
 logger.add(sys.stdout, level=log_level)
 logger.info("Begin maestro")
+logger.info(f"The debug_mode is: {DEBUG_MODE}")
 logger.debug("Debug mode on")
 
 # Function to execute xml2text.py
