@@ -1,8 +1,8 @@
 # app.py
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_from_directory
 from datetime import datetime
 from auth import require_auth
-from quants.tsionhehkwen import get_analysis_results, add_analysis_results
+from quants.tsionhehkwen import get_analysis_results, add_documents, add_analysis_results
 import pytz
 import os
 import logging
@@ -45,12 +45,31 @@ def countdown():
     time_left = next_election_date - now
     return render_template('countdown.html', time_left=time_left, election_date=next_election_date)
 
+@app.route('/analyze', methods=['POST'])
+@require_auth
+def analyze_document():
+    data = request.get_json()
+    document = data.get("document")
+    document_id = data.get("document_id")
+    if not document or not document_id:
+        return jsonify({"error": "Missing document or document_id"}), 400
+    add_documents([document], ids=[document_id])
+    return jsonify({"status": "Document added"}), 200
+
 @app.route('/get_analysis', methods=['GET'])
 @require_auth
 def get_analysis():
     query = request.args.get("query", "C-70_E_Analysis")
     results = get_analysis_results(query, n_results=1)
     return jsonify(results)
+
+@app.route('/<page_name>.html')
+def serve_analysis_page(page_name):
+    # Serve dynamically generated analysis HTML pages
+    try:
+        return render_template(f"{page_name}.html")
+    except Exception as e:
+        return jsonify({"error": f"Page not found: {e}"}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
