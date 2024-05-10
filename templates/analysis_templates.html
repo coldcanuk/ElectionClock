@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Make it mobile friendly -->
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUlL6ANPK/ACAY/8Ae17/AJ+K/wAAAO0ALwD/AKWR/wDq5v8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmgAAAAACGYGaAAAUAAIZgZoAABQAAhmBmgAZmZgCGYGaAVmZnUIZgZok2FhY5hmBmiUVmZUmGYGaAAEZAAIZgZoAAhoAAhmBmgAACAACGYGaAAAAAAIZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAH/EAAB7xAAAe8QAAGDEAABARAAAAAQAAAAEAABxxAAAccQAAHvEAAB/xAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
+    <title>Canadian Law Analysis: {{ bill_name }}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="countdown-container">
+        <div class="button-container">
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
+            <iframe src="https://ghbtns.com/github-btn.html?user=coldcanuk&repo=ElectionClock&type=star&count=true&size=large"
+                    frameborder="0" scrolling="0" width="170" height="30"></iframe>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        <h2 class="countdown-text">Analysis of Canadian Law: {{ bill_name }}</h2>
+    </div>
+    <div id="analysis-content">
+        <h3>Analysis Content</h3>
+        <div class="analysis-text">
+            {{ analysis_content }}
+        </div>
+    </div>
+    <div class="menu-waffle">
+        <a href="/countdown.html">Menu</a>
+    </div>
+    <script>
+        // Add custom JavaScript here if needed
+    </script>
+</body>
+</html>

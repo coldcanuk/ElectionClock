@@ -3,9 +3,15 @@ import os
 import subprocess
 from datetime import datetime
 from quants.tsionhehkwen import add_chunks_to_vector_store, get_analysis_results
+from dotenv import load_dotenv
 
+# Load environment variables
+env_path =  os.getenv('HOME') + "/web/ElectionClockEnvironment/.env"
+load_dotenv(dotenv_path=env_path)
 # Constants
-TEXT_FILE_PATH = "extractors/taillings/C-70_E.txt"
+BILL_NAME = "C-70_E"
+TEXT_FILE_PATH = f"extractors/taillings/{BILL_NAME}.txt"
+ANALYSIS_FILE_PATH = f"extractors/taillings/{BILL_NAME}_analysis.txt"
 MAX_FILE_AGE_DAYS = 30
 
 # Function to execute xml2text.py
@@ -30,7 +36,7 @@ def is_text_file_valid(file_path, max_age_days=30):
 def add_to_vector_store(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         document = f.read()
-    add_chunks_to_vector_store(document, doc_id="C-70_E")
+    add_chunks_to_vector_store(document, doc_id=BILL_NAME)
 
 # Update law data function
 def update_law_data():
@@ -38,8 +44,11 @@ def update_law_data():
         run_extractor()
         add_to_vector_store(TEXT_FILE_PATH)
     else:
-        print("C-70_E.txt is valid. No need to download and parse.")
-    print(get_analysis_results("C-70_E_Analysis", n_results=1))
+        print(f"{BILL_NAME}.txt is valid. No need to download and parse.")
+    
+    analysis = get_analysis_results(f"{BILL_NAME}_Analysis", n_results=1)
+    with open(ANALYSIS_FILE_PATH, "w", encoding="utf-8") as f:
+        f.write(f"### Analysis of Chunk 1:\n{analysis}")
 
 # Main function
 if __name__ == "__main__":
