@@ -63,9 +63,10 @@ def is_text_file_valid(file_path, max_age_days=30):
 
 # Add document to vector store
 def add_to_vector_store(file_path, chunk_size=2000):
+    logger.debug("Begin function add_to_vector_store")
     with open(file_path, "r", encoding="utf-8") as f:
         document = f.read()
-
+    logger.info("Split the document into chunks")
     # Split the document into chunks
     chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
     ids = [f"C-70_E_{i+1}" for i in range(len(chunks))]

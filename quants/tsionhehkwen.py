@@ -81,6 +81,7 @@ def search_documents(query, n_results=5):
 def add_analysis_results(results, ids=None, metadatas=None):
     if ids is None:
         ids = [str(i) for i in range(len(results))]
+    logger.debug(f"adding add_analysis_results results: {results}")
     analysis_collection.add(
         documents=results,
         ids=ids,
