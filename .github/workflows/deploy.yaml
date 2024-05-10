@@ -40,7 +40,8 @@ jobs:
           echo "AUTHME=${{ secrets.AUTHME }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
           echo "AUTHME=${{ secrets.AUTHME }}" >> $GITHUB_ENV
           echo "id_KEIKO=${{ secrets.id_KEIKO }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
-
+          echo "DEBUG_MODE=${{ secrets.DEBUG_MODE }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
+          
     - name: SSH and Deploy to Linode
       uses: appleboy/ssh-action@master
       with:
