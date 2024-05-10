@@ -69,7 +69,7 @@ def add_to_vector_store(file_path, chunk_size=2000):
         # Split the document into chunks
         chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
         ids = [f"C-70_E_{i+1}" for i in range(len(chunks))]
-
+        logger.debug(f"Chunked document into {len(chunks)} chunks.")
         add_documents(chunks, ids=ids)
         logger.info("Documents added to vector store successfully.")
     except Exception as e:

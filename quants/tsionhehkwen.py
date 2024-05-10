@@ -59,6 +59,8 @@ def add_documents(documents, ids=None, metadatas=None):
         ids = [str(i) for i in range(len(documents))]
     try:
         logger.info(f"Adding {len(documents)} documents to the vector store.")
+        for doc, doc_id in zip(documents, ids):
+            logger.debug(f"Document ID: {doc_id}, Content: {doc[:50]}...")
         collection.add(
             documents=documents,
             ids=ids,
