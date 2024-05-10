@@ -119,6 +119,9 @@ def analyze_chunks_from_vector_store():
             output[f"Analysis of Chunk {i}"] = f"Analysis of Chunk {i} Failed: {e}"
             logger.debug(f"### Analysis of Chunk {i} Failed:\n{e}\n\n")
 
+    # Log the raw JSON output for debugging
+    logger.debug(f"Raw JSON output: {json.dumps(output, indent=2)}")
+
     # Save the complete analysis to a file
     output_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "extractors/taillings/C-70_E_analysis.txt")
     with open(output_path, "w", encoding="utf-8") as f:
