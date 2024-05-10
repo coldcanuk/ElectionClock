@@ -47,7 +47,7 @@ def analyze_chunk_in_thread(chunk, assistant_id=asst_keiko):
                 raise Exception(f"Run failed or was cancelled. Status: {status}")
             time.sleep(10)
 
-        response = openai.beta.threads.messages.list(run_id=run.id)
+        response = openai.beta.threads.messages.list(run_id=run.id,thread_id=run.thread_id)
         if response.data:
             return response.data[0].content
         return {"error": "No response found"}
