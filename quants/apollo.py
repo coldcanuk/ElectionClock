@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from quants.tsionhehkwen import search_documents
 
 # Load environment variables from the .env file
-env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ElectionClockEnvironment/.env')
 load_dotenv(dotenv_path=env_path)
 
 # Retrieve Keiko's assistant ID and OpenAI API key

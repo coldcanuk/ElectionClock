@@ -16,11 +16,19 @@ log_dir = '/var/log/countdownapp/'
 os.makedirs(log_dir, exist_ok=True)
 log_file = os.path.join(log_dir, 'app.log')
 
-logging.basicConfig(
-    filename=log_file,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    level=log_level
-)
+# Add a check for permission errors
+try:
+    logging.basicConfig(
+        filename=log_file,
+        format='%(asctime)s [%(levelname)s] %(message)s',
+        level=log_level
+    )
+except PermissionError as e:
+    logging.basicConfig(
+        format='%(asctime)s [%(levelname)s] %(message)s',
+        level=log_level
+    )
+    logging.warning(f"PermissionError encountered with logging to file {log_file}: {e}")
 
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 logging.info("***BEGIN app.py****")
