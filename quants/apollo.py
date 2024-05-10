@@ -80,17 +80,23 @@ def analyze_chunk_in_thread(chunk, assistant_id=asst_keiko):
 
 # Function to analyze chunks in the vector store
 def analyze_chunks_from_vector_store():
+    logger.info("Begin function analyze_chunks_from_vector_store")
     results = search_documents("C-70_E", n_results=1)
     if not results["documents"]:
-        raise ValueError("Document C-70_E not found in Tsionhehkwen")
         logger.debug("Document C-70_E not found in Tsionhehkwen")
+        raise ValueError("Document C-70_E not found in Tsionhehkwen")
     document = results["documents"][0]
 
     # Split the document into chunks
+    logger.info("Split the document into chunks")
     chunk_size = 3500
-    chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
+    try:
+        chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
+    except Exception as e:
+        logger.error(f"failed chunks!!")
 
     # Analyze each chunk
+    logger.info("Analyze each chunk")
     output = []
     for i, chunk in enumerate(chunks, 1):
         try:

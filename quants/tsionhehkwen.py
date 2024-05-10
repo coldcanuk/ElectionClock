@@ -34,22 +34,37 @@ if not openai_key:
     raise ValueError("OpenAI API key not found. Please set 'keyOPENAI' in the environment variables.")
 
 # Use OpenAI's `text-embedding-ada-002` model
-embedding_function = OpenAIEmbeddingFunction(api_key=openai_key, model_name="text-embedding-ada-002")
+try:
+    logger.info("Use OpenAI's `text-embedding-ada-002` model")
+    embedding_function = OpenAIEmbeddingFunction(api_key=openai_key, model_name="text-embedding-ada-002")
+    logger.info("Successfully successed!")
+except Exception as e:
+    logger.error(f"We failed our embedding thing: {e}")
+
 
 # Retrieve or create the collection
-collection = client.get_or_create_collection(
-    name="Tsionhehkwen",
-    embedding_function=embedding_function
-)
+try:
+    logger.info("Retrieve or create the collection")
+    collection = client.get_or_create_collection(
+        name="Tsionhehkwen",
+        embedding_function=embedding_function
+    )
+except Exception as e:
+    logger.error(f"We failed to retrieve or create the collection:  {e}")
 
 # Create a collection for analysis results
-analysis_collection = client.get_or_create_collection(
-    name="AnalysisResults",
-    embedding_function=embedding_function
-)
+try:
+    logger.info("Create a collection for analysis results")
+    analysis_collection = client.get_or_create_collection(
+        name="AnalysisResults",
+        embedding_function=embedding_function
+    )
+except Exception as e:
+    logger.error(f"Failed to Create a collection for analysis results:  {e}")
 
 # Function to add documents to the vector store
 def add_documents(documents, ids=None, metadatas=None):
+    logger.debug(f"Begin function add_documents with documents:   {documents}")
     if ids is None:
         ids = [str(i) for i in range(len(documents))]
     try:
