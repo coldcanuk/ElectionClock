@@ -2,7 +2,7 @@
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime
 from auth import require_auth
-from quants.tsionhehkwen import get_analysis_results, add_documents, add_chunks_to_vector_store, add_analysis_results
+from quants.tsionhehkwen import get_analysis_results, add_analysis_results
 import pytz
 import os
 import logging
@@ -44,17 +44,6 @@ def countdown():
     next_election_date = pytz.timezone('America/Toronto').localize(next_election_date)
     time_left = next_election_date - now
     return render_template('countdown.html', time_left=time_left, election_date=next_election_date)
-
-@app.route('/analyze', methods=['POST'])
-@require_auth
-def analyze_document():
-    data = request.get_json()
-    document = data.get("document")
-    document_id = data.get("document_id")
-    if not document or not document_id:
-        return jsonify({"error": "Missing document or document_id"}), 400
-    add_chunks_to_vector_store(document, doc_id=document_id)
-    return jsonify({"status": "Document added"}), 200
 
 @app.route('/get_analysis', methods=['GET'])
 @require_auth

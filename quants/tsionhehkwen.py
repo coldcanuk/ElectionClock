@@ -41,7 +41,6 @@ try:
 except Exception as e:
     logger.error(f"We failed our embedding thing: {e}")
 
-
 # Retrieve or create the collection
 try:
     logger.info("Retrieve or create the collection")
@@ -64,7 +63,7 @@ except Exception as e:
 
 # Function to add documents to the vector store
 def add_documents(documents, ids=None, metadatas=None):
-    logger.debug(f"Begin function add_documents with documents:   {documents}")
+    logger.debug(f"Begin function add_documents with documents: {documents}")
     if ids is None:
         ids = [str(i) for i in range(len(documents))]
     try:
@@ -77,6 +76,13 @@ def add_documents(documents, ids=None, metadatas=None):
         logger.info("Documents added successfully.")
     except Exception as e:
         logger.error(f"Error in add_documents: {e}")
+
+# Function to add chunks to the vector store
+def add_chunks_to_vector_store(document, doc_id):
+    logger.debug(f"Adding chunks to vector store for doc_id: {doc_id}")
+    chunks = [document[i:i+2000] for i in range(0, len(document), 2000)]
+    ids = [f"{doc_id}_{i+1}" for i in range(len(chunks))]
+    add_documents(chunks, ids=ids)
 
 # Function to search for documents in the vector store
 def search_documents(query, n_results=5):
