@@ -56,6 +56,12 @@ def analyze_chunk_in_thread(chunk, assistant_id=asst_keiko):
         return {"error": str(e)}
 
 def analyze_chunks_from_vector_store():
+    class CustomEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, TextContentBlock):
+                return obj.__dict__  # Or however you can appropriately serialize it
+            # Let the base class default method raise the TypeError
+            return json.JSONEncoder.default(self, obj)
     results = search_documents("C-70_E", n_results=1)
     if not results["documents"]:
         raise ValueError("Document not found in vector store")
@@ -70,7 +76,7 @@ def analyze_chunks_from_vector_store():
         output[f"Analysis of Chunk {i}"] = {"text": result}
 
     with open("C-70_E_analysis.json", "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, cls=CustomEncoder)
 
     logger.info("Analysis complete and saved to file.")
 
