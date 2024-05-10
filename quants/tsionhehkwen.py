@@ -5,7 +5,8 @@ import chromadb
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
 
 # Load environment variables from the .env file
-env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ElectionClockEnvironment/.env')
+env_path =  os.getenv('HOME') + "/web/ElectionClockEnvironment/.env"
+
 load_dotenv(dotenv_path=env_path)
 # Ensure the vector store directory exists
 vector_store_directory = "quants/vector_store"
