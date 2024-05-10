@@ -2,6 +2,7 @@ import openai
 import os
 import sys
 import time
+import json
 from dotenv import load_dotenv
 from loguru import logger
 
@@ -100,7 +101,7 @@ def analyze_chunks_from_vector_store():
 
     # Analyze each chunk
     logger.info("Analyze each chunk")
-    output = []
+    output = {}
     for i, chunk in enumerate(chunks, 1):
         try:
             analysis = analyze_chunk_in_thread(chunk)
@@ -121,7 +122,7 @@ def analyze_chunks_from_vector_store():
     # Save the complete analysis to a file
     output_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "extractors/taillings/C-70_E_analysis.txt")
     with open(output_path, "w", encoding="utf-8") as f:
-        f.writelines(output)
+        json.dump(output, f, indent=2)
 
     logger.info("Analysis complete and saved to file.")
 
