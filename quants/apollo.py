@@ -14,8 +14,10 @@ env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
 load_dotenv(dotenv_path=env_path)
 
 # Retrieve Keiko's assistant ID and OpenAI API key
-asst_keiko = os.getenv("id_KEIKO")
-openai.api_key = os.getenv("keyOPENAI")
+#asst_keiko = os.getenv("id_KEIKO")
+asst_keiko = os.environ.get("id_KEIKO")
+#openai.api_key = os.getenv("keyOPENAI")
+openai.api_key = os.environ.get("keyOPENAI")
 
 # Function to analyze a chunk via Keiko's thread
 def analyze_chunk_in_thread(chunk, assistant_id=asst_keiko):

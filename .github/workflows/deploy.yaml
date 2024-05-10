@@ -30,6 +30,8 @@ jobs:
 
     - name: Set Environment Variables
       run: echo "AUTHME=${{ secrets.AUTHME }}" >> $GITHUB_ENV
+      run: echo "keyOPENAI=${{ secrets.keyOPENAI }}" >> $GITHUB_ENV
+      run: echo "id_KEIKO=${{ secrets.id_KEIKO }}" >> $GITHUB_ENV
 
     - name: SSH and Deploy to Linode
       uses: appleboy/ssh-action@master
