@@ -103,11 +103,11 @@ def analyze_chunks_from_vector_store():
     logger.info("Analyze each chunk")
     output = {}
     intLoop = 0
-    logger.debug(f"The type for analysis is:   {type(analysis)}")
     for i, chunk in enumerate(chunks, 1):
         logger.debug(f"Begin loop at iteration {intLoop}")
         try:
             analysis = analyze_chunk_in_thread(chunk)
+            logger.debug(f"The type for analysis is:   {type(analysis)}")
             # Assuming `analysis` is a JSON string, convert it to a dictionary
             analysis_dict = json.loads(analysis)  # Convert JSON string to dictionary
             output[f"Analysis of Chunk {i}"] = {
