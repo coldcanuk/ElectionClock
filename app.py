@@ -2,7 +2,7 @@
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime
 from auth import require_auth
-from quants.tsionhehkwen import get_analysis_results, add_chunks_to_vector_store
+from quants.tsionhehkwen import get_analysis_results, add_documents, add_chunks_to_vector_store, add_analysis_results
 import pytz
 import os
 import logging

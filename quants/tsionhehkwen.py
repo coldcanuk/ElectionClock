@@ -1,6 +1,12 @@
+# quants/tsionhehkwen.py
 import os
+from dotenv import load_dotenv
 import chromadb
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
+
+# Load environment variables from the .env file
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ElectionClockEnvironment/.env')
+load_dotenv(dotenv_path=env_path)
 
 # Ensure the vector store directory exists
 vector_store_directory = "quants/vector_store"
@@ -10,7 +16,7 @@ os.makedirs(vector_store_directory, exist_ok=True)
 client = chromadb.PersistentClient(path=vector_store_directory)
 
 # Use OpenAI's `text-embedding-ada-002` model
-embedding_function = OpenAIEmbeddingFunction(api_key=os.environ.get("keyOPENAI"), model_name="text-embedding-ada-002")
+embedding_function = OpenAIEmbeddingFunction(api_key=os.getenv("keyOPENAI"), model_name="text-embedding-ada-002")
 
 # Retrieve or create the collection
 collection = client.get_or_create_collection(
@@ -33,6 +39,11 @@ def add_documents(documents, ids=None, metadatas=None):
         ids=ids,
         metadatas=metadatas
     )
+
+# Function to add chunks to the vector store
+def add_chunks_to_vector_store(document, doc_id):
+    chunks = document.split("\n")  # Split the document into chunks based on newlines
+    add_documents(chunks, ids=[f"{doc_id}_{i}" for i in range(len(chunks))])
 
 # Function to search for documents in the vector store
 def search_documents(query, n_results=5):
