@@ -7,6 +7,7 @@ taillings_dir = os.path.join(project_root, "extractors/taillings")
 html_output_dir = os.path.join(project_root, "templates")
 
 def generate_analysis_html(analysis_file, bill_name):
+    analyses = []  # List to store all analyses
     try:
         with open(analysis_file, "r", encoding="utf-8") as file:
             analysis_content = json.load(file)  # Directly load the JSON data
@@ -15,9 +16,12 @@ def generate_analysis_html(analysis_file, bill_name):
         for key, value in analysis_content.items():
             if isinstance(value['text'], str):
                 value['text'] = json.loads(value['text'])
-
-        # Use 'value['text']' directly in HTML generation below
-
+                # Use 'value['text']' directly in HTML generation below
+            borg_analysis = value['text']['Analysis']['Borg_Collective_Analysis']
+            analyses.append({
+                'score': borg_analysis['Score'],
+                'explanation': borg_analysis['Explanation']
+            })
     except Exception as e:
         print(f"Error reading or processing analysis file: {e}")
         return
@@ -54,6 +58,7 @@ def generate_analysis_html(analysis_file, bill_name):
         <div class="analysis-content">
             <h2>{bill_name} Analysis</h2>
             {value['text']}  <!-- Dynamically insert analysis text -->
+            {generate_html_for_analyses(analyses)}
         </div> 
         
         <script>
@@ -154,6 +159,16 @@ def generate_analysis_html(analysis_file, bill_name):
     with open(output_file, "w", encoding="utf-8") as output:
         output.write(html_content)
     print(f"Generated HTML file: {output_file}")
+    
+def generate_html_for_analyses(analyses):
+    html_parts = []
+    for index, analysis in enumerate(analyses, start=1):
+        html_parts.append(f"""
+            <h2>Chunk {index}</h2>
+            <p><strong>Score:</strong> {analysis['score']}</p>
+            <p><strong>Explanation:</strong> {analysis['explanation']}</p>
+        """)
+    return ''.join(html_parts)
 
 if __name__ == "__main__":
     analysis_file_path = os.path.join(taillings_dir, "C-70_E_analysis.json")
