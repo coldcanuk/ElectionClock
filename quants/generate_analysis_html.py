@@ -49,7 +49,7 @@ def generate_analysis_html(analysis_file, bill_name):
             <div id="countdown-timer"></div>   
    
         </div>
-
+        <!-- Keiko's content analysis -->
         <div class="analysis-content">
             <h2>{bill_name} Analysis</h2>
             {value['text']}  <!-- Dynamically insert analysis text -->
