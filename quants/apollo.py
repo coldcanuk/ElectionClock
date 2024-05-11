@@ -73,18 +73,24 @@ def analyze_chunks_from_vector_store():
     output = {}
     for i, chunk in enumerate(chunks, 1):
         result = analyze_chunk_in_thread(chunk)
-        output[f"Analysis of Chunk {i}"] = {"text": result}  # Assuming result is a dictionary or a simple type
+        output[f"Analysis of Chunk {i}"] = {"text": result}
+        logger.debug(f"Current output: {output}")
 
-    # Serialize using the custom encoder
-    output_string = json.dumps(output, indent=2, cls=CustomEncoder)
+    # Convert the output dictionary into a single string
+    output_string = json.dumps(output, indent=2)  # This assumes that all contents of `output` are serializable
     logger.info("Output as a single string for inspection:")
     logger.info(output_string)
 
-    # Saving the string to a file
-    with open("C-70_E_analysis.json", "w", encoding="utf-8") as f:
-        f.write(output_string)
+    # Ensuring the directory exists
+    output_directory = 'extractors/taillings/'
+    output_file_path = os.path.join(output_directory, "C-70_E_analysis.json")
 
-    logger.info("Analysis complete and saved to file.")
+    try:
+        with open(output_file_path, "w", encoding="utf-8") as f:
+            f.write(output_string)  # Writing the string directly
+        logger.info("Analysis complete and saved to file.")
+    except Exception as e:
+        logger.error(f"Failed to write output to file: {e}")
 
 if __name__ == "__main__":
     analyze_chunks_from_vector_store()
