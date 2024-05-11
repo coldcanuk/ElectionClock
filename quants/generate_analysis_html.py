@@ -109,7 +109,7 @@ def generate_analysis_html(analysis_file, bill_name):
                     var degrees = 360 - (value / ring.max) * 360.0;
                     var endAngle = degrees * (Math.PI / 180);
 
-                    console.log(`Drawing ${label}:`, Math.floor(value), `at (${x},${y})`);
+                    console.log(`Drawing ${{label}}:`, Math.floor(value), `at (${{x}},${{y}})`);
 
                     $r.ctx.save();
                     $r.ctx.translate(x, y);
