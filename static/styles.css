@@ -18,6 +18,16 @@ body, html {
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 
+.analysis-content {
+    position: fixed;
+    color: white;
+    text-align: left;
+    background-color: rgba(0, 0, 0, 0.3); /* Reduced opacity for better background visibility */
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
 .button-container {
     display: flex;
     align-items: center;
