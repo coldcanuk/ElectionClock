@@ -35,6 +35,7 @@ def generate_analysis_html(analysis_file, bill_name):
     </head>
     <body>
         <div class="countdown-container">
+        
             <!-- Twitter and GitHub Buttons -->
             <div class="button-container">
                 <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
@@ -46,12 +47,13 @@ def generate_analysis_html(analysis_file, bill_name):
             <h2 class="countdown-text">Until the Next Canadian Federal Election:</h2>
             <!-- Ring Countdown Timer -->
             <div id="countdown-timer"></div>   
-            <div class="analysis-content">
-                <h2>{bill_name} Analysis</h2>
-                {value['text']}  <!-- Dynamically insert analysis text -->
-            </div>    
+   
         </div>
 
+        <div class="analysis-content">
+            <h2>{bill_name} Analysis</h2>
+            {value['text']}  <!-- Dynamically insert analysis text -->
+        </div> 
         
         <script>
             var ringer = {{
