@@ -56,7 +56,6 @@ def analyze_chunk_in_thread(chunk, assistant_id=asst_keiko):
         return {"error": str(e)}
 
 def analyze_chunks_from_vector_store():
-    
     results = search_documents("C-70_E", n_results=1)
     if not results["documents"]:
         raise ValueError("Document not found in vector store")
@@ -71,8 +70,14 @@ def analyze_chunks_from_vector_store():
         output[f"Analysis of Chunk {i}"] = {"text": result}
         logger.debug(f"Current output: {output}")
 
+    # Convert the output dictionary into a single string
+    output_string = json.dumps(output, indent=2)  # This assumes that all contents of `output` are serializable
+    logger.info("Output as a single string for inspection:")
+    logger.info(output_string)
+
+    # Saving the string to a file instead of the dictionary
     with open("C-70_E_analysis.json", "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2)
+        f.write(output_string)  # Writing the string directly
 
     logger.info("Analysis complete and saved to file.")
 
