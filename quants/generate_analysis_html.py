@@ -15,9 +15,10 @@ def generate_analysis_html(analysis_file, bill_name):
             analysis_content = file.read()
         
         # Extract JSON-like content
-        start = analysis_content.find("{")
-        end = analysis_content.rfind("}") + 1
-        analysis_json_content = analysis_content[start:end]
+        #start = analysis_content.find("{")
+        #end = analysis_content.rfind("}") + 1
+        #analysis_json_content = analysis_content[start:end]
+        analysis_json_content = json.dumps(analysis_content, indent=2)
         
         try:
             analysis_data = json.loads(analysis_json_content.replace("\'", "\""))
@@ -196,5 +197,5 @@ def generate_analysis_html(analysis_file, bill_name):
 
 # Example usage
 if __name__ == "__main__":
-    analysis_file_path = os.path.join(taillings_dir, "C-70_E_analysis.txt")
+    analysis_file_path = os.path.join(taillings_dir, "C-70_E_analysis.json")
     generate_analysis_html(analysis_file_path, "C-70_E")
