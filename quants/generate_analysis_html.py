@@ -47,10 +47,10 @@ def generate_analysis_html(analysis_file, bill_name):
             <!-- Ring Countdown Timer -->
             <div id="countdown-timer"></div>       
         </div>
-            <div class="analysis-content">
-                <h2>{bill_name} Analysis</h2>
-                {value['text']}  <!-- Dynamically insert analysis text -->
-            </div>
+        <div class="analysis-content">
+            <h2>{bill_name} Analysis</h2>
+            {value['text']}  <!-- Dynamically insert analysis text -->
+        </div>
         
         <script>
             var ringer = {{
