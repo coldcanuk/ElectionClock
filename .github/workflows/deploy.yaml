@@ -50,6 +50,7 @@ jobs:
         key: ${{ secrets.SSHKEY }}
         script: |
           cd /home/deployuser/web/ElectionClock/
+          git checkout
           git pull origin main
           sudo systemctl daemon-reload
           sudo systemctl restart gunicorn
