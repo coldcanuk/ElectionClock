@@ -19,13 +19,19 @@ body, html {
 }
 
 .analysis-content {
-    position: relative;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20%;
+    height: 400px;
     color: white;
-    text-align: left;
+    text-align: center;
     background-color: rgba(0, 0, 0, 0.3); /* Reduced opacity for better background visibility */
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    overflow-y: scroll;
 }
 
 .button-container {
