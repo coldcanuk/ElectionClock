@@ -50,7 +50,7 @@ def generate_analysis_html(analysis_file, bill_name):
    
         </div>
         <!-- Keiko's content analysis -->
-        <!-- version marker 1 -->
+        <!-- version marker 3 -->
         <div class="analysis-content">
             <h2>{bill_name} Analysis</h2>
             {value['text']}  <!-- Dynamically insert analysis text -->
