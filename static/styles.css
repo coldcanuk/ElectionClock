@@ -27,7 +27,7 @@ body, html {
     height: 400px;
     color: white;
     text-align: center;
-    background-color: rgba(157, 9, 9, 0.3); /* Reduced opacity for better background visibility */
+    background-color: rgb(255, 3, 3); /* Reduced opacity for better background visibility */
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
