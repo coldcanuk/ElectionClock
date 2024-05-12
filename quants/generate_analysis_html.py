@@ -200,11 +200,9 @@ def generate_html_for_coll_indi(analyses):
     for index, analysis in enumerate(analyses, start=1):
         html_parts.append(f"""
             <h2>Chunk {index}</h2>
-            <h3>The Collective</h3>
-            <p><strong>Score:</strong> {analysis['Cscore']}</p>
+            <h3>The Collective Score: {analysis['Cscore']}</h3>
             <p><strong>Explanation:</strong> {analysis['Cexplanation']}</p>
-            <h3>The Individual</h3>
-            <p><strong>Score:</strong> {analysis['Iscore']}</p>
+            <h3>The Individual Score: {analysis['Iscore']}</h3>
             <p><strong>Explanation:</strong> {analysis['Iexplanation']}</p>
         """)
     if len(html_parts) >= 1:
