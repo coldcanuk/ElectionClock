@@ -51,7 +51,7 @@ def generate_analysis_html(analysis_file, bill_name):
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-        <title>{bill_name} Analysis</title>
+        <title>{bill_name} AI Analysis</title>
         <link rel="stylesheet" href="/static/styles.css">
     </head>
     <body>
@@ -71,11 +71,12 @@ def generate_analysis_html(analysis_file, bill_name):
    
         </div>
         <!-- Keiko's content analysis -->
-        <!-- version marker 3 -->
+        <!-- version marker 4 -->
         <div class="analysis-content">
             <h2>{bill_name} Analysis</h2>
             <!-- Dynamically insert analysis text -->
             {generate_html_for_coll_indi(listCollIndi)}
+            <!-- End Dynamic insertions -->
         </div> 
         
         <script>
