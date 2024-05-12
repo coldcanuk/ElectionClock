@@ -184,9 +184,11 @@ def generate_html_for_coll_indi(analyses):
         html_parts.append(f"""
             <h2>Chunk {index}</h2>
             <h3>The Collective</h3>
-            <p><strong>Score:</strong> {analysis['score']}</p>
-            <p><strong>Explanation:</strong> {analysis['explanation']}</p>
+            <p><strong>Score:</strong> {analysis['Cscore']}</p>
+            <p><strong>Explanation:</strong> {analysis['Cexplanation']}</p>
             <h3>The Individual</h3>
+            <p><strong>Score:</strong> {analysis['Iscore']}</p>
+            <p><strong>Explanation:</strong> {analysis['Iexplanation']}</p>
         """)
     return ''.join(html_parts)
 
