@@ -21,12 +21,12 @@ body, html {
 .analysis-content {
     position: fixed;
     top: 40%;
-    left: 40%;
+    left: 30%;
     transform: translate(-50%, -50%);
-    width: 65%;
+    width: 50%;
     height: 400px;
     color: white;
-    text-align: center;
+    text-align: left;
     background-color: rgba(0, 0, 0, 0.3); /* Reduced opacity for better background visibility */
     border-radius: 10px;
     padding: 10px;
