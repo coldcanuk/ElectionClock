@@ -8,7 +8,8 @@ html_output_dir = os.path.join(project_root, "templates")
 
 def generate_analysis_html(analysis_file, bill_name):
     # Create the lists for use in creating the HTML
-    listIndividual = [] ; listCollective = [] ; listVoltaire = [] ; listAynRand = [] ; listSowell = [] ; listMarx = [] ;
+    listCollIndi = []
+    listPhilo = []
     try:
         with open(analysis_file, "r", encoding="utf-8") as file:
             analysis_content = json.load(file)  # Directly load the JSON data
@@ -26,16 +27,15 @@ def generate_analysis_html(analysis_file, bill_name):
                     # Extract the specific data you need for the HTML
                     # Extract Borg
                     borg_analysis = parsed_data['Analysis']['Borg_Collective_Analysis']
-                    list(listCollective).append({
-                        'score': borg_analysis['Score'],
-                        'explanation': borg_analysis['Explanation']
-                    })
-                    # Extract individual
                     ind_analysis = parsed_data['Analysis']['Individual_Heart_Analysis']
-                    list(listIndividual).append({
-                        'score': ind_analysis['Score'],
-                        'explanation': ind_analysis['Explanation']
-                    })                    
+                    list(listCollIndi).append(
+                      {
+                        'Cscore': borg_analysis['Score'],
+                        'Cexplanation': borg_analysis['Explanation'],
+                        'Iscore': ind_analysis['Score'],
+                        'Iexplanation': ind_analysis['Explanation'] 
+                      }
+                    )
                 except json.JSONDecodeError as e:
                     print(f"Error parsing JSON: {e}")
                     continue
@@ -75,8 +75,7 @@ def generate_analysis_html(analysis_file, bill_name):
         <div class="analysis-content">
             <h2>{bill_name} Analysis</h2>
             <!-- Dynamically insert analysis text -->
-            {generate_html_for_analyses(listCollective)}
-            {generate_html_for_analyses(listIndividual)}
+            {generate_html_for_coll_indi(listCollIndi)}
         </div> 
         
         <script>
@@ -179,7 +178,7 @@ def generate_analysis_html(analysis_file, bill_name):
         output.write(html_content)
     print(f"Generated HTML file: {output_file}")
     
-def generate_html_for_analyses(analyses):
+def generate_html_for_coll_indi(analyses):
     html_parts = []
     for index, analysis in enumerate(analyses, start=1):
         html_parts.append(f"""
