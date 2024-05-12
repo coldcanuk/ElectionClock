@@ -26,13 +26,13 @@ def generate_analysis_html(analysis_file, bill_name):
                     # Extract the specific data you need for the HTML
                     # Extract Borg
                     borg_analysis = parsed_data['Analysis']['Borg_Collective_Analysis']
-                    list.append({
+                    list(listCollective).append({
                         'score': borg_analysis['Score'],
                         'explanation': borg_analysis['Explanation']
                     })
                     # Extract individual
                     ind_analysis = parsed_data['Analysis']['Individual_Heart_Analysis']
-                    list.append({
+                    list(listIndividual).append({
                         'score': ind_analysis['Score'],
                         'explanation': ind_analysis['Explanation']
                     })                    
