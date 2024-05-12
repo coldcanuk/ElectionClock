@@ -1,10 +1,14 @@
-body, html {
+/* Base styles for body and html to set the full height of the page, remove default margin, 
+   and apply a full-screen background image. */
+   body, html {
     height: 100%;
     margin: 0;
     background: url('https://www.voteh.ca/static/images/default_bg.webp') no-repeat center center fixed; 
     background-size: cover;
 }
 
+/* Styles for the main container of the countdown timer.
+   It's positioned relatively to the viewport and styled for visibility and aesthetics. */
 .countdown-container {
     position: fixed;
     top: 15%;
@@ -12,28 +16,31 @@ body, html {
     transform: translate(-50%, -50%);
     color: white;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.3); /* Reduced opacity for better background visibility */
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black background */
     border-radius: 10px;
     padding: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Soft shadow for 3D effect */
 }
 
+/* Styles for the container that holds the analysis content.
+   It is also centrally positioned and designed to scroll internally if content overflows. */
 .analysis-content {
-    position: fixed;
-    top: 40%;
-    left: 30%;
+    position: relative;
+    top: 45%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
+    width: 40%;
     height: 400px;
     color: white;
     text-align: left;
-    background-color: rgba(0, 0, 0, 0.3); /* Reduced opacity for better background visibility */
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black background */
     border-radius: 10px;
     padding: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Soft shadow for 3D effect */
     overflow-y: scroll;
 }
 
+/* Container for social media buttons, styled to be centrally aligned. */
 .button-container {
     display: flex;
     align-items: center;
@@ -41,13 +48,15 @@ body, html {
     margin-bottom: 10px;
 }
 
+/* Styling for the header text above the countdown timer. */
 .countdown-text {
     margin-top: 10px;
     margin-bottom: 15px;
     font-size: 22px;
-    color: #ffffff;
+    color: #ffffff; /* White text color for contrast against the background */
 }
 
+/* Styling for the countdown timer's container. */
 #countdown-timer {
     width: 113%;
     display: flex;
@@ -56,6 +65,7 @@ body, html {
     height: 100%;
 }
 
+/* Custom scrollbar styling for the Twitter feed container (if it were to be used). */
 .twitter-feed-container {
     position: fixed;
     top: 50%;
@@ -65,32 +75,34 @@ body, html {
     height: 400px;
     color: white;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.3); /* Reduced opacity for better background visibility */
+    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     overflow-y: scroll;
 }
 
-/* Custom Scrollbar */
-.twitter-feed-container::-webkit-scrollbar {
+/* Custom scrollbar properties */
+.twitter-feed-container::-webkit-scrollbar,
+.analysis-content::-webkit-scrollbar {
     width: 8px;
 }
-
-.twitter-feed-container::-webkit-scrollbar-track {
+.twitter-feed-container::-webkit-scrollbar-track,
+.analysis-content::-webkit-scrollbar-track {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
-
-.twitter-feed-container::-webkit-scrollbar-thumb {
-    background: rgba(5, 0, 0, 0.7); /* Red color for the scrollbar */
+.twitter-feed-container::-webkit-scrollbar-thumb,
+.analysis-content::-webkit-scrollbar-thumb {
+    background: rgba(5, 0, 0, 0.7); /* Dark red color for the scrollbar thumb */
     border-radius: 10px;
 }
-
-.twitter-feed-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 0, 0, 1);
+.twitter-feed-container::-webkit-scrollbar-thumb:hover,
+.analysis-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 0, 0, 1); /* Bright red on hover for better visibility */
 }
 
+/* Basic styling for <canvas> elements used in the page, centered horizontally. */
 canvas {
     display: block;
     margin: 20px auto;
