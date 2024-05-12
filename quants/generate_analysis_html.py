@@ -1,5 +1,21 @@
 import os
 import json
+import sys
+from loguru import logger
+from dotenv import load_dotenv
+# Load environment variables from the .env file
+env_path = os.getenv('HOME') + "/web/ElectionClockEnvironment/.env"
+load_dotenv(dotenv_path=env_path)
+# Debug mode check
+DEBUG_MODE = os.getenv('DEBUG_MODE', 'False').lower() in ('true', '1', 't', 'y')
+log_level = "DEBUG" if DEBUG_MODE else "INFO"
+
+# Set up logger
+logger.remove()
+logger.add(sys.stdout, level=log_level)
+logger.info("Begin apollo")
+logger.debug("Debug mode on")
+
 
 # Directory paths
 project_root = os.path.dirname(os.path.dirname(__file__))
@@ -191,7 +207,10 @@ def generate_html_for_coll_indi(analyses):
             <p><strong>Score:</strong> {analysis['Iscore']}</p>
             <p><strong>Explanation:</strong> {analysis['Iexplanation']}</p>
         """)
-    return ''.join(html_parts)
+    if len(html_parts) >= 1:
+      return ''.join(html_parts)
+    else:
+      logger.error(f"html_parts has a length of {len(html_parts)}")
 
 if __name__ == "__main__":
     analysis_file_path = os.path.join(taillings_dir, "C-70_E_analysis.json")
