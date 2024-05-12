@@ -18,15 +18,15 @@ jobs:
       with:
         python-version: '3.8'
 
-    - name: Install Dependencies
-      run: |
-        pip install --upgrade pip
-        pip install -r requirements.txt
-
     - name: Activate Virtual Environment
       run: |
         python -m venv venv
         source venv/bin/activate
+
+    - name: Install Dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
 
     - name: Create .env File in ElectionClockEnvironment
       uses: appleboy/ssh-action@master
