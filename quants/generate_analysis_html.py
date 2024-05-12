@@ -13,15 +13,19 @@ def generate_analysis_html(analysis_file, bill_name):
             analysis_content = json.load(file)  # Directly load the JSON data
 
         # Assuming 'text' contains nested JSON that needs to be interpreted as such
-        for key, value in analysis_content.items():
-            if isinstance(value['text'], str):
-                value['text'] = json.loads(value['text'])
-                # Use 'value['text']' directly in HTML generation below
-            borg_analysis = value['text']['Analysis']['Borg_Collective_Analysis']
-            analyses.append({
-                'score': borg_analysis['Score'],
-                'explanation': borg_analysis['Explanation']
-            })
+        for key, value in analysis_content.items():    
+            if isinstance(value['text'], list):
+                # Assuming the desired content is always the first item in the list
+                analysis_data = value['text'][0]['text']  # Adjust the path according to the actual structure
+                if isinstance(analysis_data, str):
+                    analysis_data = json.loads(analysis_data.replace("'", "\""))
+
+                # Extract the specific data you need for the HTML
+                borg_analysis = analysis_data['Analysis']['Borg_Collective_Analysis']
+                analyses.append({
+                    'score': borg_analysis['Score'],
+                    'explanation': borg_analysis['Explanation']
+                })            
     except Exception as e:
         print(f"Error reading or processing analysis file: {e}")
         return
