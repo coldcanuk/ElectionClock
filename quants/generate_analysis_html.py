@@ -44,7 +44,7 @@ def generate_analysis_html(analysis_file, bill_name):
                     # Extract Borg
                     borg_analysis = parsed_data['Analysis']['Borg_Collective_Analysis']
                     ind_analysis = parsed_data['Analysis']['Individual_Heart_Analysis']
-                    list(listCollIndi).append(
+                    listCollIndi.append(
                       {
                         'Cscore': borg_analysis['Score'],
                         'Cexplanation': borg_analysis['Explanation'],
@@ -87,7 +87,7 @@ def generate_analysis_html(analysis_file, bill_name):
    
         </div>
         <!-- Keiko's content analysis -->
-        <!-- version marker 4 -->
+        <!-- version marker 5 -->
         <div class="analysis-content">
             <h2>{bill_name} Analysis</h2>
             <!-- Dynamically insert analysis text -->
