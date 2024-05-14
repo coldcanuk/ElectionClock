@@ -62,7 +62,7 @@ class CustomEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 def analyze_chunks_from_vector_store():
-    results = search_documents("C-70_E", n_results=1)
+    results = search_documents("C-70_E", n_results=10)
     if not results["documents"]:
         raise ValueError("Document not found in vector store")
 

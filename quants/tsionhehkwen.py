@@ -85,18 +85,53 @@ def add_chunks_to_vector_store(document, doc_id):
     add_documents(chunks, ids=ids)
 
 # Function to search for documents in the vector store
-def search_documents(query, n_results=5):
+#def search_documents(query, n_results=5):
+#    try:
+#        logger.debug(f"Searching for query: {query} with n_results: {n_results}")
+#        results = collection.query(
+#            query_texts=[query],
+#            n_results=n_results
+#        )
+#        logger.debug(f"Search results: {results}")
+#        return results
+#    except Exception as e:
+#        logger.error(f"Error in search_documents: {e}")
+#        return {}
+def search_documents(query, n_results=None):
     try:
-        logger.debug(f"Searching for query: {query} with n_results: {n_results}")
-        results = collection.query(
-            query_texts=[query],
-            n_results=n_results
-        )
-        logger.debug(f"Search results: {results}")
-        return results
+        results = []
+        page = 0
+        page_size = 10  # Define a reasonable page size for pagination
+
+        while True:
+            logger.debug(f"Searching for query: {query} with n_results: {n_results} at page: {page}")
+            current_results = collection.query(
+                query_texts=[query],
+                n_results=n_results if n_results is not None else page_size,
+                offset=page * page_size
+            )
+            if not current_results['documents']:
+                break  # Break if no more documents are returned
+            results.extend(current_results['documents'])
+            if n_results is not None and len(results) >= n_results:
+                results = results[:n_results]  # Limit results if n_results is specified
+                break
+            if n_results is None:
+                page += 1  # Only increment page if fetching all documents
+
+        logger.debug(f"Total documents fetched: {len(results)}")
+        return {'documents': results}
     except Exception as e:
         logger.error(f"Error in search_documents: {e}")
-        return {}
+        return {'documents': []}
+
+
+
+
+
+
+
+
 
 # Function to add analysis results
 def add_analysis_results(results, ids=None, metadatas=None):
