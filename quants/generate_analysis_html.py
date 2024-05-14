@@ -24,52 +24,43 @@ html_output_dir = os.path.join(project_root, "templates")
 
 def generate_analysis_html(analysis_file, bill_name):
     # Create the lists for use in creating the HTML
+    listCollAnalysis = []
     listCollIndi = []
     listPhilo = []
+
     try:
         with open(analysis_file, "r", encoding="utf-8") as file:
             analysis_content = json.load(file)  # Directly load the JSON data
 
-        # Assuming 'text' contains nested JSON that needs to be interpreted as such
+        # Parsing through nested JSON for varied analysis sections
         for key, value in analysis_content.items():
             if isinstance(value['text'], list):
-                # Assuming the desired content is always the first item in the list
-                # Print the problematic JSON string for debugging
-                json_str = value['text'][0]['text']['value']
-                print("JSON string before parsing:", json_str)
-                try:
-                    # Parse the inner JSON string
-                    parsed_data = json.loads(json_str)
-                    # Extract the specific data you need for the HTML
-                    # Extract Borg
-                    borg_analysis = parsed_data['Analysis']['Borg_Collective_Analysis']
-                    ind_analysis = parsed_data['Analysis']['Individual_Heart_Analysis']
-                    listCollIndi.append(
-                      {
-                        'Cscore': borg_analysis['Score'],
-                        'Cexplanation': borg_analysis['Explanation'],
-                        'Iscore': ind_analysis['Score'],
-                        'Iexplanation': ind_analysis['Explanation'] 
-                      }
+                json_data = value['text'][0]['text']['value']
+
+                analysis = json_data['Analysis']
+                for topic, details in analysis.items():
+                    if topic in ["Individual_Heart_Analysis", "Borg_Collective_Analysis"]:
+                        listCollIndi.append({
+                            'Topic': topic,
+                            'Score': details['Score'],
+                            'Explanation': details['Explanation']
+                        })
+                    else:
+                        listCollAnalysis.append({topic: details})
+
+                # Extract Philosopher Perspectives
+                philosopher_perspectives = json_data['Philosopher_Perspectives']
+                for perspective in philosopher_perspectives:
+                    philosopher = perspective['Philosopher']
+                    perspective_text = perspective['Perspective']
+                    listPhilo.append(
+                        {
+                            'Philosopher': philosopher,
+                            'Perspective': perspective_text
+                        }
                     )
-
-                    # Extract Philosopher Perspectives
-                    philosopher_perspectives = parsed_data['Philosopher_Perspectives']
-                    for perspective in philosopher_perspectives:
-                        philosopher = perspective['Philosopher']
-                        perspective_text = perspective['Perspective']
-                        listPhilo.append(
-                            {
-                                'Philosopher': philosopher,
-                                'Perspective': perspective_text
-                            }
-                        )
-
-                except json.JSONDecodeError as e:
-                    print(f"Error parsing JSON: {e}")
-                    continue
     except Exception as e:
-        print(f"Error reading or processing analysis file: {e}")
+        logger.error(f"Error reading or processing analysis file: {e}")
         return
 
 # Create HTML content
@@ -203,27 +194,32 @@ def generate_analysis_html(analysis_file, bill_name):
     </body>
     </html>
     """
-
-
     output_file = os.path.join(html_output_dir, f"{bill_name}_analysis.html")
     with open(output_file, "w", encoding="utf-8") as output:
         output.write(html_content)
     print(f"Generated HTML file: {output_file}")
     
+# Define the function that generates HTML for collective and individual analyses
 def generate_html_for_coll_indi(analyses):
     html_parts = []
     for index, analysis in enumerate(analyses, start=1):
+      if analysis['Topic'] == "Borg_Collective_Analysis":
         html_parts.append(f"""
-            <h2>Chunk {index}</h2>
-            <h3>The Collective Score: {analysis['Cscore']}</h3>
-            <p><strong>Explanation:</strong> {analysis['Cexplanation']}</p>
-            <h3>The Individual Score: {analysis['Iscore']}</h3>
-            <p><strong>Explanation:</strong> {analysis['Iexplanation']}</p>
+          <h2>Chunk {index} - Borg Collective Analysis</h2>
+          <h3>The Collective Score: {analysis['Score']}</h3>
+          <p><strong>Explanation:</strong> {analysis['Explanation']}</p>
+        """)
+      elif analysis['Topic'] == "Individual_Heart_Analysis":
+        html_parts.append(f"""
+          <h2>Chunk {index} - Individual Heart Analysis</h2>
+          <h3>The Individual Score: {analysis['Score']}</h3>
+          <p><strong>Explanation:</strong> {analysis['Explanation']}</p>
         """)
     if len(html_parts) >= 1:
       return ''.join(html_parts)
     else:
       logger.error(f"html_parts has a length of {len(html_parts)}")
+
       
 def generate_html_for_coll_phil(analyses):
     html_parts = []
