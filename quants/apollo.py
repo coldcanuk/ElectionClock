@@ -69,11 +69,15 @@ def analyze_chunks_from_vector_store():
     document = results["documents"][0][0]
     chunk_size = 3500
     chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
+    # Log the number of chunks
+    logger.info(f"Total chunks to process: {len(chunks)}")
 
     output = {}
     for i, chunk in enumerate(chunks, 1):
+        logger.debug(f"Processing chunk {i} of {len(chunks)}")
         result = analyze_chunk_in_thread(chunk)
         output[f"Analysis of Chunk {i}"] = {"text": result}  # Assuming result is a dictionary or a simple type
+        logger.debug(f"Completed processing chunk {i}")
 
     # Serialize using the custom encoder
     output_string = json.dumps(output, indent=2, cls=CustomEncoder)
