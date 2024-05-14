@@ -73,7 +73,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 20 -->
+    <!-- version marker 21 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -212,17 +212,25 @@ def generate_html_for_keiko_analysis(analyses):
     html_parts = []
     for index, analysis in enumerate(analyses, start=1):
         for topic, content in analysis.items():
-            html_parts.append(f"""
-              <div class="analysis-section">
-                <h2>{topic}</h2>
-                <p>{content.get('Overview', 'No overview provided')}</p>
-                <ul>
-                {''.join(f"<li>{change}</li>" for change in content.get('Details', {}).get('Amendments', ['No details provided']))}
-                </ul>
-              </div>
-            """)
+            if isinstance(content, dict):
+                html_parts.append(f"""
+                  <div class="analysis-section">
+                    <h2>{topic}</h2>
+                    <p>{content.get('Overview', 'No overview provided')}</p>
+                    <ul>
+                    {''.join(f"<li>{change}</li>" for change in content.get('Details', {}).get('Amendments', ['No details provided']))}
+                    </ul>
+                  </div>
+                """)
+            else:
+                # Handling for string type data like 'Overview'
+                html_parts.append(f"""
+                  <div class="analysis-section">
+                    <h2>{topic}</h2>
+                    <p>{content}</p>
+                  </div>
+                """)
     return ''.join(html_parts) if html_parts else "<p>No additional analysis provided.</p>"
-
 
 # Define the function that generates HTML for collective and individual analyses
 def generate_html_for_coll_indi(analyses):
