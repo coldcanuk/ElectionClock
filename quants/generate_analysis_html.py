@@ -228,7 +228,7 @@ def generate_html_for_keiko_analysis(analyses):
                   <div class="analysis-section">
                     <h2>{topic}</h2>
                     <p>{content}</p>
-                    <p>{content['Detail']}
+                    <p>{content['Detail'][0]}
                   </div>
                 """)
     return ''.join(html_parts) if html_parts else "<p>No additional analysis provided.</p>"
