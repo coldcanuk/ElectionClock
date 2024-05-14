@@ -70,56 +70,10 @@ def generate_analysis_html(analysis_file, bill_name):
         logger.error(f"Error reading or processing analysis file: {e}")
         return
 
-"""
-
-def generate_analysis_html(analysis_file, bill_name):
-    # Create the lists for use in creating the HTML
-    listCollAnalysis = []
-    listCollIndi = []
-    listPhilo = []
-
-    try:
-        with open(analysis_file, "r", encoding="utf-8") as file:
-            analysis_content = json.load(file)  # Directly load the JSON data
-
-        # Parsing through nested JSON for varied analysis sections
-        for key, value in analysis_content.items():
-            if isinstance(value['text'], list):
-                logger.debug("Made match and we are a list")
-                json_data = value['text'][0]['text']['value']
-                
-                analysis = json_data['Analysis']
-                for topic, details in analysis.items():
-                    if topic in ["Individual_Heart_Analysis", "Borg_Collective_Analysis"]:
-                        logger.debug("Topic has match either Individual_Heart_Analysis or Borg_Collective_Analysis")
-                        listCollIndi.append({
-                            'Topic': topic,
-                            'Score': details['Score'],
-                            'Explanation': details['Explanation']
-                        })
-                    else:
-                        logger.debug("We didn't match the Individual or Borg and so this is the else")
-                        listCollAnalysis.append({topic: details})
-
-                # Extract Philosopher Perspectives
-                philosopher_perspectives = json_data['Philosopher_Perspectives']
-                for perspective in philosopher_perspectives:
-                    philosopher = perspective['Philosopher']
-                    perspective_text = perspective['Perspective']
-                    listPhilo.append(
-                        {
-                            'Philosopher': philosopher,
-                            'Perspective': perspective_text
-                        }
-                    )
-    except Exception as e:
-        logger.error(f"Error reading or processing analysis file: {e}")
-        return
-"""
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 17 -->
+    <!-- version marker 18 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
