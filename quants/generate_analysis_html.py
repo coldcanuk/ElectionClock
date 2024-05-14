@@ -35,8 +35,9 @@ def generate_analysis_html(analysis_file, bill_name):
         # Parsing through nested JSON for varied analysis sections
         for key, value in analysis_content.items():
             if isinstance(value['text'], list):
+                logger.debug("Made match and we are a list")
                 json_data = value['text'][0]['text']['value']
-
+                
                 analysis = json_data['Analysis']
                 for topic, details in analysis.items():
                     if topic in ["Individual_Heart_Analysis", "Borg_Collective_Analysis"]:
@@ -66,7 +67,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 14 -->
+    <!-- version marker 15 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
