@@ -75,7 +75,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 9 -->
+    <!-- version marker 10 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -231,7 +231,7 @@ def generate_html_for_coll_phil(analyses):
         html_parts.append(f"""
             <h2>Chunk {index}</h2>
             <h3>Voltaire's Opinion:</h3> 
-            <p><strong>{analysis['Voltaire']}</strong></p>
+            <p><strong>{analysis['Philosopher']}:{analysis['Perspective']}</strong></p>
         """)
     if len(html_parts) >= 1:
       return ''.join(html_parts)
