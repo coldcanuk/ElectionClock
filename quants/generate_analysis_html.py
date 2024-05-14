@@ -73,7 +73,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 23 -->
+    <!-- version marker 24 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -210,28 +210,39 @@ def generate_analysis_html(analysis_file, bill_name):
 #Define the function that generate HTML for Keiko's analysis
 def generate_html_for_keiko_analysis(analyses):
     html_parts = []
-    for index, analysis in enumerate(analyses, start=0):
+    for analysis in analyses:
         for topic, content in analysis.items():
-            if isinstance(content, dict):
-                html_parts.append(f"""
-                  <div class="analysis-section">
-                    <h2>{topic}</h2>
-                    <p>{content.get('Overview', 'No overview provided')}</p>
-                    <ul>
-                    {''.join(f"<li>{change}</li>" for change in content.get('Details', {}).get('Amendments', ['No details provided']))}
-                    </ul>
-                  </div>
-                """)
-            else:
-                # Handling for string type data like 'Overview'
+            if isinstance(content, dict) and topic == "Details":
+                # Process nested dictionaries within Details
+                html_parts.append("<div class='analysis-section'><h2>Details</h2>")
+                for part, info in content.items():
+                    html_parts.append(f"<h3>{part}</h3><ul>")
+                    if isinstance(info, dict) and 'Amendments' in info:
+                        for amendment in info['Amendments']:
+                            html_parts.append("<li>")
+                            for key, value in amendment.items():
+                                html_parts.append(f"<strong>{key}:</strong> {value} ")
+                            html_parts.append("</li>")
+                    html_parts.append("</ul>")
+                html_parts.append("</div>")
+            elif isinstance(content, str):
+                # Simple string contents (e.g., Overview)
                 html_parts.append(f"""
                   <div class="analysis-section">
                     <h2>{topic}</h2>
                     <p>{content}</p>
-                    <p>{content['Details']}
+                  </div>
+                """)
+            else:
+                # Fallback for unexpected content types
+                html_parts.append(f"""
+                  <div class="analysis-section">
+                    <h2>{topic}</h2>
+                    <p>Content not displayed properly</p>
                   </div>
                 """)
     return ''.join(html_parts) if html_parts else "<p>No additional analysis provided.</p>"
+
 
 # Define the function that generates HTML for collective and individual analyses
 def generate_html_for_coll_indi(analyses):
