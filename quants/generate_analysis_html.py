@@ -23,7 +23,7 @@ taillings_dir = os.path.join(project_root, "extractors/taillings")
 html_output_dir = os.path.join(project_root, "templates")
 
 def generate_analysis_html(analysis_file, bill_name):
-    listCollAnalysis = []
+    listKeikoAnalysis = []
     listCollIndi = []
     listPhilo = []
 
@@ -53,7 +53,7 @@ def generate_analysis_html(analysis_file, bill_name):
                         })
                     else:
                         logger.debug(f"Adding topic to listCollAnalysis: {topic}")
-                        listCollAnalysis.append({topic: details})
+                        listKeikoAnalysis.append({topic: details})
 
                 # Extract Philosopher Perspectives
                 philosopher_perspectives = json_data.get('Philosopher_Perspectives', [])
@@ -73,7 +73,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 19 -->
+    <!-- version marker 20 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -102,6 +102,8 @@ def generate_analysis_html(analysis_file, bill_name):
         
         <div class="analysis-content">
             <h2>{bill_name} Analysis</h2>
+            <!-- Dynamically insert first portions of Keiko's output -->
+            {generate_html_for_keiko_analysis(listKeikoAnalysis)}
             <!-- Dynamically insert analysis text -->
             {generate_html_for_coll_indi(listCollIndi)}
             <!-- Dynamically insert philospher opinions-->
@@ -205,20 +207,36 @@ def generate_analysis_html(analysis_file, bill_name):
     with open(output_file, "w", encoding="utf-8") as output:
         output.write(html_content)
     print(f"Generated HTML file: {output_file}")
-    
+#Define the function that generate HTML for Keiko's analysis
+def generate_html_for_keiko_analysis(analyses):
+    html_parts = []
+    for index, analysis in enumerate(analyses, start=1):
+        for topic, content in analysis.items():
+            html_parts.append(f"""
+              <div class="analysis-section">
+                <h2>{topic}</h2>
+                <p>{content.get('Overview', 'No overview provided')}</p>
+                <ul>
+                {''.join(f"<li>{change}</li>" for change in content.get('Details', {}).get('Amendments', ['No details provided']))}
+                </ul>
+              </div>
+            """)
+    return ''.join(html_parts) if html_parts else "<p>No additional analysis provided.</p>"
+
+
 # Define the function that generates HTML for collective and individual analyses
 def generate_html_for_coll_indi(analyses):
     html_parts = []
     for index, analysis in enumerate(analyses, start=1):
       if analysis['Topic'] == "Borg_Collective_Analysis":
         html_parts.append(f"""
-          <h2>Chunk {index} - Borg Collective Analysis</h2>
+          <h2>Collective Impact Analysis</h2>
           <h3>The Collective Score: {analysis['Score']}</h3>
           <p><strong>Explanation:</strong> {analysis['Explanation']}</p>
         """)
       elif analysis['Topic'] == "Individual_Heart_Analysis":
         html_parts.append(f"""
-          <h2>Chunk {index} - Individual Heart Analysis</h2>
+          <h2>Individual Impact Analysis</h2>
           <h3>The Individual Score: {analysis['Score']}</h3>
           <p><strong>Explanation:</strong> {analysis['Explanation']}</p>
         """)
