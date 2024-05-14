@@ -53,6 +53,11 @@ def generate_analysis_html(analysis_file, bill_name):
                         'Iexplanation': ind_analysis['Explanation'] 
                       }
                     )
+                    listPhilo.append(
+                        {
+                            "Voltaire":phil_pers['Voltaire']
+                        }
+                    )
                 except json.JSONDecodeError as e:
                     print(f"Error parsing JSON: {e}")
                     continue
@@ -88,12 +93,13 @@ def generate_analysis_html(analysis_file, bill_name):
    
         </div>
         <!-- Keiko's content analysis -->
-        <!-- version marker 6 -->
+        <!-- version marker 7 -->
         <div class="analysis-content">
             <h2>{bill_name} Analysis</h2>
             <!-- Dynamically insert analysis text -->
             {generate_html_for_coll_indi(listCollIndi)}
-            <!-- End Dynamic insertions -->
+            <!-- Dynamically insert philospher opinions-->
+            {generate_html_for_coll_phil(listPhilo)}
         </div> 
         
         <script>
@@ -205,6 +211,19 @@ def generate_html_for_coll_indi(analyses):
             <p><strong>Explanation:</strong> {analysis['Cexplanation']}</p>
             <h3>The Individual Score: {analysis['Iscore']}</h3>
             <p><strong>Explanation:</strong> {analysis['Iexplanation']}</p>
+        """)
+    if len(html_parts) >= 1:
+      return ''.join(html_parts)
+    else:
+      logger.error(f"html_parts has a length of {len(html_parts)}")
+      
+def generate_html_for_coll_phil(analyses):
+    html_parts = []
+    for index, analysis in enumerate(analyses, start=1):
+        html_parts.append(f"""
+            <h2>Chunk {index}</h2>
+            <h3>Voltaire's Opinion:</h3> 
+            <p><strong>{analysis['Voltaire']}</strong></p>
         """)
     if len(html_parts) >= 1:
       return ''.join(html_parts)
