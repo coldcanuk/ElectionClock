@@ -75,7 +75,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 10 -->
+    <!-- version marker 11 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -227,12 +227,15 @@ def generate_html_for_coll_indi(analyses):
       
 def generate_html_for_coll_phil(analyses):
     html_parts = []
+    intCount = 0
     for index, analysis in enumerate(analyses, start=1):
         html_parts.append(f"""
             <h2>Chunk {index}</h2>
-            <h3>Voltaire's Opinion:</h3> 
+            <h3>Philosophers:</h3> 
             <p><strong>{analysis['Philosopher']}:{analysis['Perspective']}</strong></p>
+            <p>Loop Count: {intCount}
         """)
+        intCount += 1
     if len(html_parts) >= 1:
       return ''.join(html_parts)
     else:
