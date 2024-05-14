@@ -44,7 +44,6 @@ def generate_analysis_html(analysis_file, bill_name):
                     # Extract Borg
                     borg_analysis = parsed_data['Analysis']['Borg_Collective_Analysis']
                     ind_analysis = parsed_data['Analysis']['Individual_Heart_Analysis']
-                    phil_pers = parsed_data['Analysis']['Philosopher Perspectives']
                     listCollIndi.append(
                       {
                         'Cscore': borg_analysis['Score'],
@@ -53,11 +52,19 @@ def generate_analysis_html(analysis_file, bill_name):
                         'Iexplanation': ind_analysis['Explanation'] 
                       }
                     )
-                    listPhilo.append(
-                        {
-                            "Voltaire":phil_pers['Voltaire']
-                        }
-                    )
+
+                    # Extract Philosopher Perspectives
+                    philosopher_perspectives = parsed_data['Philosopher_Perspectives']
+                    for perspective in philosopher_perspectives:
+                        philosopher = perspective['Philosopher']
+                        perspective_text = perspective['Perspective']
+                        listPhilo.append(
+                            {
+                                'Philosopher': philosopher,
+                                'Perspective': perspective_text
+                            }
+                        )
+
                 except json.JSONDecodeError as e:
                     print(f"Error parsing JSON: {e}")
                     continue
@@ -68,6 +75,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
+    <!-- version marker 9 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -93,7 +101,7 @@ def generate_analysis_html(analysis_file, bill_name):
    
         </div>
         <!-- Keiko's content analysis -->
-        <!-- version marker 8 -->
+        
         <div class="analysis-content">
             <h2>{bill_name} Analysis</h2>
             <!-- Dynamically insert analysis text -->
