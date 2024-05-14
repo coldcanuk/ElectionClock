@@ -41,12 +41,14 @@ def generate_analysis_html(analysis_file, bill_name):
                 analysis = json_data['Analysis']
                 for topic, details in analysis.items():
                     if topic in ["Individual_Heart_Analysis", "Borg_Collective_Analysis"]:
+                        logger.debug("Topic has match either Individual_Heart_Analysis or Borg_Collective_Analysis")
                         listCollIndi.append({
                             'Topic': topic,
                             'Score': details['Score'],
                             'Explanation': details['Explanation']
                         })
                     else:
+                        logger.debug("We didn't match the Individual or Borg and so this is the else")
                         listCollAnalysis.append({topic: details})
 
                 # Extract Philosopher Perspectives
@@ -67,7 +69,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 15 -->
+    <!-- version marker 16 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
