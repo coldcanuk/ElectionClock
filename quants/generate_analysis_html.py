@@ -23,6 +23,56 @@ taillings_dir = os.path.join(project_root, "extractors/taillings")
 html_output_dir = os.path.join(project_root, "templates")
 
 def generate_analysis_html(analysis_file, bill_name):
+    listCollAnalysis = []
+    listCollIndi = []
+    listPhilo = []
+
+    try:
+        with open(analysis_file, "r", encoding="utf-8") as file:
+            analysis_content = json.load(file)  # Directly load the JSON data
+
+        for key, value in analysis_content.items():
+            if isinstance(value['text'], list):
+                logger.debug("Made match and we are a list")
+                json_data_str = value['text'][0]['text']['value']
+                try:
+                    # Here we parse the string value to actual JSON
+                    json_data = json.loads(json_data_str)
+                except json.JSONDecodeError as e:
+                    logger.error(f"Failed to decode JSON from 'value': {e}")
+                    continue
+
+                analysis = json_data.get('Analysis', {})
+                for topic, details in analysis.items():
+                    if topic in ["Individual_Heart_Analysis", "Borg_Collective_Analysis"]:
+                        logger.debug(f"Processing {topic}")
+                        listCollIndi.append({
+                            'Topic': topic,
+                            'Score': details.get('Score'),
+                            'Explanation': details.get('Explanation')
+                        })
+                    else:
+                        logger.debug(f"Adding topic to listCollAnalysis: {topic}")
+                        listCollAnalysis.append({topic: details})
+
+                # Extract Philosopher Perspectives
+                philosopher_perspectives = json_data.get('Philosopher_Perspectives', [])
+                for perspective in philosopher_perspectives:
+                    philosopher = perspective.get('Philosopher')
+                    perspective_text = perspective.get('Perspective')
+                    listPhilo.append(
+                        {
+                            'Philosopher': philosopher,
+                            'Perspective': perspective_text
+                        }
+                    )
+    except Exception as e:
+        logger.error(f"Error reading or processing analysis file: {e}")
+        return
+
+"""
+
+def generate_analysis_html(analysis_file, bill_name):
     # Create the lists for use in creating the HTML
     listCollAnalysis = []
     listCollIndi = []
@@ -65,11 +115,11 @@ def generate_analysis_html(analysis_file, bill_name):
     except Exception as e:
         logger.error(f"Error reading or processing analysis file: {e}")
         return
-
+"""
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 16 -->
+    <!-- version marker 17 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
