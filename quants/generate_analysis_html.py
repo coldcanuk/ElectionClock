@@ -44,7 +44,7 @@ def generate_analysis_html(analysis_file, bill_name):
                     # Extract Borg
                     borg_analysis = parsed_data['Analysis']['Borg_Collective_Analysis']
                     ind_analysis = parsed_data['Analysis']['Individual_Heart_Analysis']
-                    phil_pers = parsed_data['Philosopher Perspectives']['Voltaire']
+                    phil_pers = parsed_data['Analysis']['Philosopher Perspectives']
                     listCollIndi.append(
                       {
                         'Cscore': borg_analysis['Score'],
