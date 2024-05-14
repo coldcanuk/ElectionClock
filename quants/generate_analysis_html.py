@@ -73,7 +73,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 21 -->
+    <!-- version marker 22 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -210,7 +210,7 @@ def generate_analysis_html(analysis_file, bill_name):
 #Define the function that generate HTML for Keiko's analysis
 def generate_html_for_keiko_analysis(analyses):
     html_parts = []
-    for index, analysis in enumerate(analyses, start=1):
+    for index, analysis in enumerate(analyses, start=0):
         for topic, content in analysis.items():
             if isinstance(content, dict):
                 html_parts.append(f"""
