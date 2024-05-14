@@ -75,7 +75,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 13 -->
+    <!-- version marker 14 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -230,11 +230,9 @@ def generate_html_for_coll_phil(analyses):
     html_parts.append(f"""
         <h3>Philosophers:</h3>
         """)
-    intCount = 0
     for index, analysis in enumerate(analyses, start=0):
         html_parts.append(f"""
-            <p><strong>{analysis['Philosopher']}:{analysis['Perspective']}</strong></p>
-            <p>Loop Count: {intCount}
+            <p><strong>{analysis['Philosopher']}: {analysis['Perspective']}</strong></p>
         """)
         intCount += 1
     if len(html_parts) >= 1:
