@@ -73,7 +73,7 @@ def generate_analysis_html(analysis_file, bill_name):
 # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
-    <!-- version marker 24 -->
+    <!-- version marker 25 -->
     <html lang="en">
     <head>
         <meta charset="UTF-8">
