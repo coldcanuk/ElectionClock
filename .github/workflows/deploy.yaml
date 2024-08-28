@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3  # Updated to v3
 
     - name: Set Up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4  # Updated to v4
       with:
         python-version: '3.8'
 
@@ -41,7 +41,7 @@ jobs:
           echo "AUTHME=${{ secrets.AUTHME }}" >> $GITHUB_ENV
           echo "id_KEIKO=${{ secrets.id_KEIKO }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
           echo "DEBUG_MODE=${{ secrets.DEBUG_MODE }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
-          
+
     - name: SSH and Deploy to Linode
       uses: appleboy/ssh-action@master
       with:
@@ -55,5 +55,6 @@ jobs:
           sudo systemctl daemon-reload
           sudo systemctl restart gunicorn
           sudo systemctl status gunicorn
+
     - name: Clean Up Post-Deployment
       run: echo "Deployment Complete and Services Restarted"
