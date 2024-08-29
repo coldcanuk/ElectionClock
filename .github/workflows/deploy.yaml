@@ -11,20 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3  # Updated to v3
+      uses: actions/checkout@v3
 
     - name: Set Up Python
-      uses: actions/setup-python@v4  # Updated to v4
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.8'
+        python-version: '3.12'
 
-    - name: Activate Virtual Environment
+    - name: Activate Virtual Environment and Install Dependencies
       run: |
-        python -m venv venv
-        source venv/bin/activate
-
-    - name: Install Dependencies
-      run: |
+        python3 -m venv /home/deployuser/venvs/ElectionClock
+        source /home/deployuser/venvs/ElectionClock/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
 
@@ -38,7 +35,6 @@ jobs:
           mkdir -p /home/deployuser/web/ElectionClockEnvironment
           echo "keyOPENAI=${{ secrets.keyOPENAI }}" > /home/deployuser/web/ElectionClockEnvironment/.env
           echo "AUTHME=${{ secrets.AUTHME }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
-          echo "AUTHME=${{ secrets.AUTHME }}" >> $GITHUB_ENV
           echo "id_KEIKO=${{ secrets.id_KEIKO }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
           echo "DEBUG_MODE=${{ secrets.DEBUG_MODE }}" >> /home/deployuser/web/ElectionClockEnvironment/.env
 
@@ -50,11 +46,10 @@ jobs:
         key: ${{ secrets.SSHKEY }}
         script: |
           cd /home/deployuser/web/ElectionClock/
-          git checkout
+          source /home/deployuser/venvs/ElectionClock/bin/activate
           git pull origin main
           sudo systemctl daemon-reload
           sudo systemctl restart gunicorn
           sudo systemctl status gunicorn
-
     - name: Clean Up Post-Deployment
       run: echo "Deployment Complete and Services Restarted"
