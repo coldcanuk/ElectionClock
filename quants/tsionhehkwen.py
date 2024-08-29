@@ -176,6 +176,20 @@ def list_all_analysis_results():
     """
     return analysis_collection.peek()
 
+#Function to list all document IDs in the vector store
+def list_documents():
+    """
+    Lists all document IDs in the vector store.
+    :return: A list of all document IDs.
+    """
+    try:
+        documents = collection.get()
+        document_ids = documents['ids']
+        return document_ids
+    except Exception as e:
+        logger.error(f"Error in list_documents: {e}")
+        return []
+
 # Function to delete all analysis results from the vector store
 def delete_all_analysis_results():
     """
