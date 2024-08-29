@@ -114,7 +114,7 @@ def search_documents(query, n_results=None):
             current_results = collection.query(
                 query_texts=[query],
                 n_results=n_results if n_results is not None else page_size,
-                offset=page * page_size
+                # offset=page * page_size #ChromaDB hates offset? not sure
             )
             if not current_results['documents']:
                 break  # Break if no more documents are returned
