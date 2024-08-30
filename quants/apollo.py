@@ -77,25 +77,20 @@ class CustomEncoder(json.JSONEncoder):
 # Function to analyze chunks of text retrieved from the vector store
 def analyze_chunks_from_vector_store():
     """
-    Retrieves a document from the vector store, splits it into chunks,
-    and sends each chunk to the OpenAI API for analysis.
-    The results are saved to a JSON file.
+    Retrieves each chunk of the document from the vector store and sends it
+    to the OpenAI API for analysis. The results are saved to a JSON file.
     """
-    # Search for the document in the vector store
-    results = search_documents("C-70_E", n_results=10)
+    # Search for the document chunks in the vector store
+    results = search_documents("C-70_E", n_results=100)
     if not results["documents"]:
-        raise ValueError("Document not found in vector store")
+        raise ValueError("No chunks found for the document in the vector store")
 
-    document = results["documents"][0][0]
-    chunk_size = 3500
-    chunks = [document[i:i + chunk_size] for i in range(0, len(document), chunk_size)]
-
-    logger.info(f"Total chunks to process: {len(chunks)}")
+    logger.info(f"Total chunks to process: {len(results['documents'])}")
     output = {}
 
     # Analyze each chunk and store the results
-    for i, chunk in enumerate(chunks, 1):
-        logger.debug(f"Processing chunk {i} of {len(chunks)}")
+    for i, (chunk, _) in enumerate(results['documents'], 1):
+        logger.debug(f"Processing chunk {i} of {len(results['documents'])}")
         result = analyze_chunk_in_thread(chunk)
         output[f"Analysis of Chunk {i}"] = {"text": result}
         logger.debug(f"Completed processing chunk {i}")
